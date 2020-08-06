@@ -4,42 +4,72 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Objects;
 
 import ru.zilzilok.android_internet_alerts.R;
+import ru.zilzilok.android_internet_alerts.utils.ProgressButton;
 
 public class MainActivity extends AppCompatActivity {
+    private ProgressButton addButton;
+    private ProgressButton checkButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Check button click listener
+        View viewCheckButton = findViewById(R.id.buttonCheck);
+        checkButton = new ProgressButton(MainActivity.this,
+                viewCheckButton, "Check Connection");
+        viewCheckButton.setOnClickListener(this::buttonCheckClicked);
+
+        // Add button click listener
+        View viewAddButton = findViewById(R.id.buttonAdd);
+        addButton = new ProgressButton(MainActivity.this,
+                viewAddButton, "Add");
+        viewAddButton.setOnClickListener(this::buttonAddClicked);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void buttonCheckClicked(View view) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connectivityManager != null
-                ? connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                : null;
-        NetworkInfo mobile = connectivityManager != null
-                ? connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                : null;
-        if (wifi != null && wifi.isConnectedOrConnecting()) {
-            Toast.makeText(this, "WIFI", Toast.LENGTH_LONG).show();
-        } else if (mobile != null && mobile.isConnectedOrConnecting()) {
-            getNetworkClass(getApplicationContext());
-        } else {
-            Toast.makeText(this, "No Network", Toast.LENGTH_LONG).show();
-        }
+        checkButton.buttonActivated();
+        view.setEnabled(false);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = connectivityManager != null
+                    ? connectivityManager.getActiveNetworkInfo()
+                    : null;
+            if (activeNetwork != null) {
+                switch (activeNetwork.getType()) {
+                    case ConnectivityManager.TYPE_WIFI:
+                        // connected to wifi
+                        Toast.makeText(this, "WIFI", Toast.LENGTH_LONG).show();
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE:
+                        // connected to mobile data
+                        getNetworkClass(getApplicationContext());
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                Toast.makeText(this, "No Network", Toast.LENGTH_LONG).show();
+            }
+            checkButton.buttonRestored();
+            view.setEnabled(true);
+        }, 800);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -79,5 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error",
                         Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void buttonAddClicked(View view) {
+
     }
 }

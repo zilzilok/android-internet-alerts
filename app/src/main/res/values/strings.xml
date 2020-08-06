@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">android-internet-alerts</string>
+
+    <string name="approve">Approve</string>
 </resources>
