@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.settings1) {
-            Toast.makeText(this, "BY ZILZILOK. 2020.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Created by zilzilok", Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
