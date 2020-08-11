@@ -46,4 +46,5 @@ dependencies {
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:1.2.0"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:1.2.0"
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0'
 }

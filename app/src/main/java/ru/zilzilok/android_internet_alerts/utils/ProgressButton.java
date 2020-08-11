@@ -13,15 +13,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import ru.zilzilok.android_internet_alerts.R;
 
 public class ProgressButton {
+    private View view;
     private CardView cardView;
     private ConstraintLayout constraintLayout;
     private ProgressBar progressBar;
     private TextView textView;
-    private View.OnClickListener event;
     private Animation fade_in;
     private String firstText;
 
     public ProgressButton(Context context, View view) {
+        this.view = view;
         cardView = view.findViewById(R.id.progressButtonCardView);
         constraintLayout = view.findViewById(R.id.progressButtonConstraintLayout);
         progressBar = view.findViewById(R.id.progressButtonProgressBar);
@@ -33,6 +34,14 @@ public class ProgressButton {
         this(context, view);
         this.firstText = firstText;
         textView.setText(firstText);
+    }
+
+    public void blockButton() {
+        view.setEnabled(false);
+    }
+
+    public void unblockButton() {
+        view.setEnabled(true);
     }
 
     public void buttonActivated() {

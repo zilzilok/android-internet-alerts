@@ -1,56 +1,42 @@
 package ru.zilzilok.android_internet_alerts.activities;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
+import android.os.Message;
+import android.view.ContextThemeWrapper;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import ru.zilzilok.android_internet_alerts.R;
 import ru.zilzilok.android_internet_alerts.utils.AlertState;
-import ru.zilzilok.android_internet_alerts.utils.AlertStateAdapter;
+import ru.zilzilok.android_internet_alerts.utils.ConnectionType;
 import ru.zilzilok.android_internet_alerts.utils.ProgressButton;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-    private static final String CHANNEL_ID = "ZXC";
-    private static final String CHANNEL_NAME = "ZXC";
-    private static final String CHANNEL_DESCRIPTION = "ZXC";
+import static java.lang.Thread.sleep;
 
-    private int currId = 0;
-    private ProgressButton addButton;
+public class MainActivity extends AppCompatActivity {
+    private boolean isPoopClicked;
     private ProgressButton checkButton;
-    private List<AlertState> alertStates = new ArrayList<>();
-    private AlertStateAdapter alertStateAdapter;
+    private ProgressButton addButton;
+    ConstraintLayout stateLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name_actionbar);
 
         // Check button click listener
         View viewCheckButton = findViewById(R.id.buttonCheck);
@@ -61,110 +47,113 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         // Add button click listener
         View viewAddButton = findViewById(R.id.buttonAdd);
         addButton = new ProgressButton(MainActivity.this,
-                viewAddButton, "Add");
+                viewAddButton, "Start Monitor");
         viewAddButton.setOnClickListener(this::buttonAddClicked);
 
-        // List for States
-        ListView alertStateList = findViewById(R.id.listViewStates);
-        alertStateAdapter = new AlertStateAdapter(this, R.layout.list_item, alertStates);
-        alertStateList.setAdapter(alertStateAdapter);
+        // Current State
+        stateLayout = findViewById(R.id.constraintLayoutState);
+        ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
+        stateLayout.setVisibility(View.GONE);
+        ImageView stateButton = stateProgressLayout.findViewById(R.id.imageViewPoop);
+        stateButton.setOnClickListener(this::buttonPoopClicked);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settings1) {
+            Toast.makeText(this, "BY ZILZILOK. 2020.", Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void buttonCheckClicked(View view) {
         checkButton.buttonActivated();
-        view.setEnabled(false);
+        checkButton.blockButton();
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            Toast.makeText(this, getNetworkClass(this), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, ConnectionType.getNetworkClass(this), Toast.LENGTH_LONG).show();
             checkButton.buttonRestored();
-            view.setEnabled(true);
+            checkButton.unblockButton();
         }, 800);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String getNetworkClass(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager != null
-                ? connectivityManager.getActiveNetworkInfo()
-                : null;
-
-        if (activeNetwork != null) {
-            switch (activeNetwork.getType()) {
-                case ConnectivityManager.TYPE_WIFI:
-                    // connected to wifi
-                    return "WIFI";
-                case ConnectivityManager.TYPE_MOBILE:
-                    // connected to mobile data
-                    TelephonyManager mTelephonyManager = (TelephonyManager)
-                            context.getSystemService(Context.TELEPHONY_SERVICE);
-                    int networkType = Objects.requireNonNull(mTelephonyManager).getNetworkType();
-                    switch (networkType) {
-                        case TelephonyManager.NETWORK_TYPE_GPRS:
-                        case TelephonyManager.NETWORK_TYPE_EDGE:
-                        case TelephonyManager.NETWORK_TYPE_CDMA:
-                        case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        case TelephonyManager.NETWORK_TYPE_IDEN:
-                            return "2G";
-                        case TelephonyManager.NETWORK_TYPE_UMTS:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                        case TelephonyManager.NETWORK_TYPE_HSDPA:
-                        case TelephonyManager.NETWORK_TYPE_HSUPA:
-                        case TelephonyManager.NETWORK_TYPE_HSPA:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                        case TelephonyManager.NETWORK_TYPE_EHRPD:
-                        case TelephonyManager.NETWORK_TYPE_HSPAP:
-                            return "3G";
-                        case TelephonyManager.NETWORK_TYPE_LTE:
-                            return "4G";
-                        default:
-                            return "Error";
-                    }
-                default:
-                    return "Error";
-            }
-        } else {
-            return "No Network";
-        }
+    private void buttonPoopClicked(View view) {
+        isPoopClicked = true;
     }
 
     public void buttonAddClicked(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.setOnMenuItemClickListener(this);
+        isPoopClicked = false;
+        Context wrapper = new ContextThemeWrapper(this, R.style.PopupStyle);
+        PopupMenu popupMenu = new PopupMenu(wrapper, view);
+        popupMenu.setOnMenuItemClickListener(this::popupMenuItemClicked);
         popupMenu.inflate(R.menu.popup_alerts_menu);
         popupMenu.show();
     }
 
-    private void startMonitor(AlertState state) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
-            channel.setDescription(CHANNEL_DESCRIPTION);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
-        }
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(state.getConnectionType() + " appeared.")
-                        .setContentText("Wow, omg, Vadim pidor.")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
-        notificationManager.notify(currId++, builder.build());
+    private boolean popupMenuItemClicked(MenuItem item) {
+        AlertState alertState = new AlertState(item.toString());
+        ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
+        TextView stateText = stateProgressLayout.findViewById(R.id.progressStateTextView);
+        stateText.setText("WAIT FOR\n" + alertState.getConnectionType());
+        startMonitor(alertState);
+        return true;
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        AlertState alertState = new AlertState(item.toString());
-        alertStates.add(alertState);
-        startMonitor(alertState);
-        alertStateAdapter.notifyDataSetChanged();
-        return true;
+    private static final int BLOCK_BUTTON = 1;
+    private static final int UNBLOCK_BUTTON = 2;
+    private static final int VISIBLE_STATE = 3;
+    private static final int GONE_STATE = 4;
+
+    private static class TmpHandler extends Handler {
+        MainActivity mthis;
+
+        TmpHandler(MainActivity activity) {
+            this.mthis = activity;
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case BLOCK_BUTTON:
+                    mthis.addButton.blockButton();
+                    break;
+                case UNBLOCK_BUTTON:
+                    mthis.addButton.unblockButton();
+                    break;
+                case VISIBLE_STATE:
+                    mthis.stateLayout.setVisibility(View.VISIBLE);
+                    break;
+                case GONE_STATE:
+                    mthis.stateLayout.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    }
+
+    private void startMonitor(AlertState state) {
+        Handler handler = new TmpHandler(this);
+        new Thread(() -> {
+            handler.sendEmptyMessage(BLOCK_BUTTON);
+            handler.sendEmptyMessage(VISIBLE_STATE);
+            while (!isPoopClicked && !state.getConnectionType().equals(ConnectionType.getNetworkClass(this))) {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            handler.sendEmptyMessage(UNBLOCK_BUTTON);
+            handler.sendEmptyMessage(GONE_STATE);
+            if (!isPoopClicked) {
+                state.notifyAboutState(this);
+            }
+        }).start();
     }
 }

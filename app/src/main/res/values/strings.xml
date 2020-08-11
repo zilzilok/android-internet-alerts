@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">android-internet-alerts</string>
+    <string name="app_name">NCTracker</string>
+    <string name="app_name_actionbar">Network Connection Tracker</string>
 
-    <string name="approve">Approve</string>
+    <string name="approve">ZXC</string>
 </resources>
