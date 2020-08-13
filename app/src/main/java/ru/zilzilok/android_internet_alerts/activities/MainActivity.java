@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings1:
-                Toast.makeText(this, "\"Network Connection Tracker\"\nby @zilzilok", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "\"Internet Connection Tracker\"\nby @zilzilok", Toast.LENGTH_LONG).show();
                 break;
             case R.id.settings2:
                 SharedPreferences sp = getSharedPreferences("lang", MODE_PRIVATE);
