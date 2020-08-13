@@ -3,7 +3,7 @@
 |:----------------------------------------------:|:------------------------------------------:|:---------------------------------------------------:|
 | <img src="images/main_window.jpg" width="250"> | <img src="images/monitor.jpg" width="250"> | <img src="images/check_connection.jpg" width="250"> |
 
-**This application can monitor for definite internet connection on your android smartphone (like on second image). When this connection appears, you'll get appropriate notification:**
+**This application monitors a chosen type of internet connection on your android smartphone (like on second image). When this connection appears, you'll get appropriate notification:**
 
 |               English notification               |                Russian notification               |
 |:------------------------------------------------:|:-------------------------------------------------:|
