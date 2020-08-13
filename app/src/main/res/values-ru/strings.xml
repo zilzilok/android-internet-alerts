@@ -16,7 +16,7 @@
     <string name="_4g">4G/LTE</string>
 
     <!--ActionBar Titles-->
-    <string name="info">Info</string>
+    <string name="info">Информация</string>
     <string name="change_language">Изменить язык</string>
 
     <!--Etc.-->

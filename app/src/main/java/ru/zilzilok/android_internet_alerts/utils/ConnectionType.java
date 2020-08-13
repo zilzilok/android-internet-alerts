@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi;
 
 import java.util.Objects;
 
+import ru.zilzilok.android_internet_alerts.R;
+
 public class ConnectionType {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -56,7 +58,7 @@ public class ConnectionType {
                     return "ERROR";
             }
         } else {
-            return "NO INTERNET";
+            return context.getResources().getString(R.string.no_internet);
         }
     }
 }

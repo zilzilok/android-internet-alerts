@@ -1,6 +1,9 @@
 package ru.zilzilok.android_internet_alerts.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.Objects;
+import java.util.Locale;
 
 import ru.zilzilok.android_internet_alerts.R;
 import ru.zilzilok.android_internet_alerts.utils.AlertState;
@@ -35,19 +38,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sp = getSharedPreferences("lang", 0);
+        String lang = sp.getString("lang", "ru");
+        Locale locale = new Locale(lang);
+
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name_actionbar);
 
         // Check button click listener
         View viewCheckButton = findViewById(R.id.buttonCheck);
         checkButton = new ProgressButton(MainActivity.this,
-                viewCheckButton, "Check Connection");
+                viewCheckButton, getResources().getString(R.string.check_button));
         viewCheckButton.setOnClickListener(this::buttonCheckClicked);
 
         // Add button click listener
         View viewAddButton = findViewById(R.id.buttonAdd);
         addButton = new ProgressButton(MainActivity.this,
-                viewAddButton, "Start Monitor");
+                viewAddButton, getResources().getString(R.string.monitor_button));
         viewAddButton.setOnClickListener(this::buttonAddClicked);
 
         // Current State
@@ -60,16 +71,58 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.settings1) {
-            Toast.makeText(this, "Created by zilzilok", Toast.LENGTH_LONG).show();
+        switch (item.getItemId()) {
+            case R.id.settings1:
+                Toast.makeText(this, "\"Network Connection Tracker\"\nby @zilzilok", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.settings2:
+                SharedPreferences sp = getSharedPreferences("lang", MODE_PRIVATE);
+                String countryCode = sp.getString("lang", "ru");
+                SharedPreferences.Editor editor = sp.edit();
+                switch (countryCode) {
+                    case "ru":
+                        countryCode = "en";
+                        break;
+                    case "en":
+                        countryCode = "ru";
+                        break;
+                }
+                editor.putString("lang", countryCode);
+                editor.apply();
+                changeLang(countryCode);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changeLang(String lang) {
+        if (lang.equalsIgnoreCase(""))
+            return;
+        Locale myLocale = new Locale(lang);
+
+        Locale.setDefault(myLocale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.locale = myLocale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+        saveLocale(lang);
+
+        startActivity(new Intent(this, SplashActivity.class));
+        finish();
+        overridePendingTransition(0, 0);
+    }
+
+    private void saveLocale(String lang) {
+        String langPref = "Language";
+        SharedPreferences prefs = getSharedPreferences("def_loc", 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(langPref, lang);
+        editor.apply();
     }
 
     public void buttonCheckClicked(View view) {
@@ -100,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         AlertState alertState = new AlertState(item.toString());
         ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
         TextView stateText = stateProgressLayout.findViewById(R.id.progressStateTextView);
-        stateText.setText("WAIT FOR\n" + alertState.getConnectionType());
+        stateText.setText(getResources().getString(R.string.wait) + "\n" + alertState.getConnectionType());
         startMonitor(alertState);
         return true;
     }

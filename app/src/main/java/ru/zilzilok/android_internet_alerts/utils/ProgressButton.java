@@ -20,8 +20,10 @@ public class ProgressButton {
     private TextView textView;
     private Animation fade_in;
     private String firstText;
+    private Context context;
 
     public ProgressButton(Context context, View view) {
+        this.context = context;
         this.view = view;
         cardView = view.findViewById(R.id.progressButtonCardView);
         constraintLayout = view.findViewById(R.id.progressButtonConstraintLayout);
@@ -48,7 +50,7 @@ public class ProgressButton {
         progressBar.setAnimation(fade_in);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setAnimation(fade_in);
-        textView.setText("Wait...");
+        textView.setText(context.getResources().getString(R.string.wait_loading));
     }
 
     public void buttonRestored() {

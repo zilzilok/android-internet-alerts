@@ -41,8 +41,7 @@ public class AlertState {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_stat_poop)
-                        .setContentTitle(getConnectionType() + " appeared.")
-                        .setContentText("Lorem ipsum dolor sit amet, consectetur adipiscing elit..")
+                        .setContentTitle(getConnectionType() + context.getResources().getString(R.string.appeard))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

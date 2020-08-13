@@ -5,22 +5,22 @@
     <string name="approve">ZXC</string>
 
     <!--Main Buttons-->
-    <string name="monitor_button">Наблюдать</string>
-    <string name="check_button">Проверить</string>
+    <string name="monitor_button">Start Monitor</string>
+    <string name="check_button">Check Connection</string>
 
     <!--Connection Types-->
     <string name="wifi">WIFI</string>
-    <string name="no_internet">НЕТ ИНТЕРНЕТА</string>
+    <string name="no_internet">NO INTERNET</string>
     <string name="_2g">2G/E</string>
     <string name="_3g">3G/H/H+</string>
     <string name="_4g">4G/LTE</string>
 
     <!--ActionBar Titles-->
     <string name="info">Info</string>
-    <string name="change_language">Изменить язык</string>
+    <string name="change_language">Change language</string>
 
     <!--Etc.-->
-    <string name="wait">ОЖИДАНИЕ</string>
-    <string name="wait_loading">Сек…</string>
-    <string name="appeard">" появился ¯\_(ツ)_/¯"</string>
+    <string name="wait">WAIT FOR</string>
+    <string name="wait_loading">Wait…</string>
+    <string name="appeard">" has appeared ༼ຈل͜ຈ༽"</string>
 </resources>
