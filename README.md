@@ -5,7 +5,7 @@
 
 **This application can monitor for definite internet connection on your android smartphone (like on second image). When this connection appears, you'll get appropriate notification:**
 
-|                  English alert                   |                   Russian alert                   |
+|               English notification               |                Russian notification               |
 |:------------------------------------------------:|:-------------------------------------------------:|
 | <img src="images/english_alert.jpg" width="392"> | <img src="images/russian_alert.jpg" width="392">  |
 
