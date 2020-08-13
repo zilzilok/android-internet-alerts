@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(new Intent(this, SplashActivity.class));
         finish();
+        Toast.makeText(this, getResources().getString(R.string.curr_lang), Toast.LENGTH_SHORT).show();
         overridePendingTransition(0, 0);
     }
 
