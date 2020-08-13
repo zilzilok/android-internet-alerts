@@ -1,9 +1,9 @@
-# Network Connection Tracker (NCT)
+# Internet Connection Tracker (ICT)
 |                  Main window                   |              Monitoring 4G/LTE             |                 Checking Connection                 |
 |:----------------------------------------------:|:------------------------------------------:|:---------------------------------------------------:|
 | <img src="images/main_window.jpg" width="250"> | <img src="images/monitor.jpg" width="250"> | <img src="images/check_connection.jpg" width="250"> |
 
-**This application can monitor for definite network connection on your android smartphone (like on second image). When this connection appears, you'll get appropriate notification:**
+**This application can monitor for definite internet connection on your android smartphone (like on second image). When this connection appears, you'll get appropriate notification:**
 
 |                  English alert                   |                   Russian alert                   |
 |:------------------------------------------------:|:-------------------------------------------------:|
