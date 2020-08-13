@@ -9,4 +9,4 @@
 |:------------------------------------------------:|:-------------------------------------------------:|
 | <img src="images/english_alert.jpg" width="392"> | <img src="images/russian_alert.jpg" width="392">  |
 
-&nbsp;&nbsp;&nbsp;&nbsp;**Application supports two languages: russian and english.**
+**Application supports two languages: russian and english.**
