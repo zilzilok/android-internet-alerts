@@ -1,4 +1,4 @@
-package ru.zilzilok.android_internet_alerts.utils;
+package ru.zilzilok.android_internet_alerts.utils.layouts;
 
 import android.content.Context;
 import android.graphics.Canvas;

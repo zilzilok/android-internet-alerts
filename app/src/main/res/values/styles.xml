@@ -1,18 +1,25 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Main Activity. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="PopupStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textStyle">bold</item>
+    <!-- Statistic Activity. -->
+    <style name="AppTheme.StatisticsTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- Popup State Activity. -->
+    <style name="AppTheme.PopupStates" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <!-- Splash Screen Activity. -->
     <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:background">@drawable/splash_screen</item>
     </style>

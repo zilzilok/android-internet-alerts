@@ -1,18 +1,15 @@
 package ru.zilzilok.android_internet_alerts.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,53 +17,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ru.zilzilok.android_internet_alerts.R;
 import ru.zilzilok.android_internet_alerts.utils.AlertState;
 import ru.zilzilok.android_internet_alerts.utils.ConnectionType;
-import ru.zilzilok.android_internet_alerts.utils.ProgressButton;
+import ru.zilzilok.android_internet_alerts.utils.database.DBHelper;
+import ru.zilzilok.android_internet_alerts.utils.layouts.ProgressButton;
 
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean isPoopClicked;
+    private boolean isExitClicked;
     private ProgressButton checkButton;
-    private ProgressButton addButton;
+    private ProgressButton monitorButton;
+    private ProgressButton statButton;
     ConstraintLayout stateLayout;
+    DBHelper database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sp = getSharedPreferences("lang", 0);
-        String lang = sp.getString("lang", "ru");
-        Locale locale = new Locale(lang);
 
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        initializeAppLanguage();
+
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name_actionbar);
 
-        // Check button click listener
-        View viewCheckButton = findViewById(R.id.buttonCheck);
-        checkButton = new ProgressButton(MainActivity.this,
-                viewCheckButton, getResources().getString(R.string.check_button));
-        viewCheckButton.setOnClickListener(this::buttonCheckClicked);
-
-        // Add button click listener
-        View viewAddButton = findViewById(R.id.buttonAdd);
-        addButton = new ProgressButton(MainActivity.this,
-                viewAddButton, getResources().getString(R.string.monitor_button));
-        viewAddButton.setOnClickListener(this::buttonAddClicked);
-
-        // Current State
-        stateLayout = findViewById(R.id.constraintLayoutState);
-        ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
-        stateLayout.setVisibility(View.GONE);
-        ImageView stateButton = stateProgressLayout.findViewById(R.id.imageViewPoop);
-        stateButton.setOnClickListener(this::buttonPoopClicked);
+        initializeButtons();
     }
 
     @Override
@@ -100,7 +80,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeLang(String lang) {
+    /*
+      _
+     | |       __ _   _ __     __ _   _   _    __ _    __ _    ___
+     | |      / _` | | '_ \   / _` | | | | |  / _` |  / _` |  / _ \
+     | |___  | (_| | | | | | | (_| | | |_| | | (_| | | (_| | |  __/
+     |_____|  \__,_| |_| |_|  \__, |  \__,_|  \__,_|  \__, |  \___|
+                              |___/                   |___/
+    */
+    private void initializeAppLanguage() {
+        SharedPreferences sp = getSharedPreferences("lang", 0);
+        String lang = sp.getString("lang", "ru");
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    }
+
+    private void saveLocale(@NonNull String lang) {
+        String langPref = "Language";
+        SharedPreferences prefs = getSharedPreferences("def_loc", 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(langPref, lang);
+        editor.apply();
+    }
+
+    private void changeLang(@NonNull String lang) {
         if (lang.equalsIgnoreCase(""))
             return;
         Locale myLocale = new Locale(lang);
@@ -118,15 +124,49 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-    private void saveLocale(String lang) {
-        String langPref = "Language";
-        SharedPreferences prefs = getSharedPreferences("def_loc", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(langPref, lang);
-        editor.apply();
+    /*
+      ____            _     _
+     | __ )   _   _  | |_  | |_    ___    _ __    ___
+     |  _ \  | | | | | __| | __|  / _ \  | '_ \  / __|
+     | |_) | | |_| | | |_  | |_  | (_) | | | | | \__ \
+     |____/   \__,_|  \__|  \__|  \___/  |_| |_| |___/
+    */
+    private void initializeButtons() {
+        // Check button click listener
+        View viewCheckButton = findViewById(R.id.buttonCheck);
+        checkButton = new ProgressButton(MainActivity.this,
+                viewCheckButton, getResources().getString(R.string.check_button));
+        viewCheckButton.setOnClickListener(this::buttonCheckClicked);
+
+        // Monitor button click listener
+        View viewMonitorButton = findViewById(R.id.buttonAdd);
+        monitorButton = new ProgressButton(MainActivity.this,
+                viewMonitorButton, getResources().getString(R.string.monitor_button));
+        viewMonitorButton.setOnClickListener(this::buttonMonitorClicked);
+
+        // Statistics button click listener
+        View viewStatButton = findViewById(R.id.buttonStat);
+        statButton = new ProgressButton(MainActivity.this,
+                viewStatButton, getResources().getString(R.string.stat_button));
+        viewStatButton.setOnClickListener(this::statButtonClicked);
+
+        // Current State
+        stateLayout = findViewById(R.id.constraintLayoutState);
+        ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
+        stateLayout.setVisibility(View.GONE);
+
+        // Initialize exit listener for state
+        ImageView stateButton = stateProgressLayout.findViewById(R.id.imageViewPoop);
+        stateButton.setOnClickListener(this::buttonExitClicked);
     }
 
-    public void buttonCheckClicked(View view) {
+    /*
+           ___   _                 _
+          / __| | |_    ___   __  | |__
+         | (__  | ' \  / -_) / _| | / /
+          \___| |_||_| \___| \__| |_\_\
+    */
+    private void buttonCheckClicked(@NonNull View view) {
         checkButton.buttonActivated();
         checkButton.blockButton();
         Handler handler = new Handler();
@@ -137,26 +177,67 @@ public class MainActivity extends AppCompatActivity {
         }, 800);
     }
 
-    private void buttonPoopClicked(View view) {
-        isPoopClicked = true;
+    /*
+          ___   _            _     _        _     _
+         / __| | |_   __ _  | |_  (_)  ___ | |_  (_)  __
+         \__ \ |  _| / _` | |  _| | | (_-< |  _| | | / _|
+         |___/  \__| \__,_|  \__| |_| /__/  \__| |_| \__|
+     */
+    private void statButtonClicked(@NonNull View view) {
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
     }
 
-    public void buttonAddClicked(View view) {
-        isPoopClicked = false;
-        Context wrapper = new ContextThemeWrapper(this, R.style.PopupStyle);
-        PopupMenu popupMenu = new PopupMenu(wrapper, view);
-        popupMenu.setOnMenuItemClickListener(this::popupMenuItemClicked);
-        popupMenu.inflate(R.menu.popup_alerts_menu);
-        popupMenu.show();
+    /*
+          ___   _            _                         _   _
+         / __| | |_   __ _  | |_   ___     ___  __ __ (_) | |_
+         \__ \ |  _| / _` | |  _| / -_)   / -_) \ \ / | | |  _|
+         |___/  \__| \__,_|  \__| \___|   \___| /_\_\ |_|  \__|
+     */
+    private void buttonExitClicked(@NonNull View view) {
+        isExitClicked = true;
     }
 
-    private boolean popupMenuItemClicked(MenuItem item) {
-        AlertState alertState = new AlertState(item.toString());
+    /*
+          __  __                _   _
+         |  \/  |  ___   _ _   (_) | |_   ___   _ _
+         | |\/| | / _ \ | ' \  | | |  _| / _ \ | '_|
+         |_|  |_| \___/ |_||_| |_|  \__| \___/ |_|
+     */
+    private void buttonMonitorClicked(@NonNull View view) {
+        isExitClicked = false;
+        Intent intent = new Intent(this, PopupStatesActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            String[] checkedValues = data.getStringArrayExtra("checkedValues");
+            if (checkedValues != null) {
+                List<AlertState> checkedAlertStates = new ArrayList<>();
+                for (String checkedValue : checkedValues) {
+                    checkedAlertStates.add(new AlertState(checkedValue));
+                }
+
+                showStateAlertLayout(checkedAlertStates);
+                database.updateDatabase(checkedAlertStates);
+                startMonitor(checkedAlertStates);
+            }
+        }
+    }
+
+    private void showStateAlertLayout(@NonNull List<AlertState> checkedAlertStates) {
         ConstraintLayout stateProgressLayout = stateLayout.findViewById(R.id.stateProgress);
         TextView stateText = stateProgressLayout.findViewById(R.id.progressStateTextView);
-        stateText.setText(getResources().getString(R.string.wait) + "\n" + alertState.getConnectionType());
-        startMonitor(alertState);
-        return true;
+        String addition = checkedAlertStates.size() > 1 ? String.format(" + %s %s",
+                checkedAlertStates.size() - 1,
+                getResources().getString(R.string.more)) : "";
+        stateText.setText(String.format("%s\n%s%s",
+                getResources().getString(R.string.wait),
+                checkedAlertStates.get(0).getConnectionType(),
+                addition));
     }
 
     private static final int BLOCK_BUTTON = 1;
@@ -164,10 +245,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int VISIBLE_STATE = 3;
     private static final int GONE_STATE = 4;
 
-    private static class TmpHandler extends Handler {
+    private static class MonitorHandler extends Handler {
         MainActivity mthis;
 
-        TmpHandler(MainActivity activity) {
+        MonitorHandler(@NonNull MainActivity activity) {
             this.mthis = activity;
         }
 
@@ -176,10 +257,10 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case BLOCK_BUTTON:
-                    mthis.addButton.blockButton();
+                    mthis.monitorButton.blockButton();
                     break;
                 case UNBLOCK_BUTTON:
-                    mthis.addButton.unblockButton();
+                    mthis.monitorButton.unblockButton();
                     break;
                 case VISIBLE_STATE:
                     mthis.stateLayout.setVisibility(View.VISIBLE);
@@ -191,12 +272,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startMonitor(AlertState state) {
-        Handler handler = new TmpHandler(this);
+    private void startMonitor(@ NonNull List<AlertState> states) {
+        Handler handler = new MonitorHandler(this);
         new Thread(() -> {
             handler.sendEmptyMessage(BLOCK_BUTTON);
             handler.sendEmptyMessage(VISIBLE_STATE);
-            while (!isPoopClicked && !state.getConnectionType().equals(ConnectionType.getNetworkClass(this))) {
+            AlertState resState = new AlertState(ConnectionType.getNetworkClass(this));
+            while (!isExitClicked &&
+                    !states.contains(resState = new AlertState(ConnectionType.getNetworkClass(this)))) {
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
@@ -205,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
             }
             handler.sendEmptyMessage(UNBLOCK_BUTTON);
             handler.sendEmptyMessage(GONE_STATE);
-            if (!isPoopClicked) {
-                state.notifyAboutState(this);
+            if (!isExitClicked) {
+                resState.notifyAboutState(this);
             }
         }).start();
     }

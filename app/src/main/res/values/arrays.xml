@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="connection_types">
+        <item>@string/wifi</item>
+        <item>@string/no_internet</item>
+        <item>@string/_2g</item>
+        <item>@string/_3g</item>
+        <item>@string/_4g</item>
+    </string-array>
+</resources>

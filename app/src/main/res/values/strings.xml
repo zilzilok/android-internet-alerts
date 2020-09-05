@@ -1,27 +1,30 @@
 <resources>
     <!--Main-->
     <string name="app_name">ICT</string>
-    <string name="app_name_actionbar">ICTracker ༼ຈل͜ຈ༽</string>
+    <string name="app_name_actionbar">ICTracker</string>
     <string name="approve">ZXC</string>
 
     <!--Main Buttons-->
     <string name="monitor_button">Наблюдать</string>
     <string name="check_button">Проверить</string>
+    <string name="stat_button">Статистика</string>
 
     <!--Connection Types-->
     <string name="wifi">WIFI</string>
-    <string name="no_internet">НЕТ ИНТЕРНЕТА</string>
+    <string name="no_internet">Нет Интернета</string>
     <string name="_2g">2G/E</string>
     <string name="_3g">3G/H/H+</string>
     <string name="_4g">4G/LTE</string>
 
     <!--ActionBar Titles-->
-    <string name="info">Info</string>
+    <string name="info">Информация</string>
     <string name="change_language">Изменить язык</string>
 
     <!--Etc.-->
-    <string name="wait">ОЖИДАНИЕ</string>
+    <string name="wait">Ожидание</string>
     <string name="wait_loading">Сек…</string>
     <string name="appeard">" появился ¯\_(ツ)_/¯"</string>
     <string name="curr_lang">Русский</string>
+    <string name="more">ещё</string>
+    <string name="start">Начать</string>
 </resources>

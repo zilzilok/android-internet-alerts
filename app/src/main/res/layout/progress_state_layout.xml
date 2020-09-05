@@ -22,7 +22,7 @@
                 android:id="@+id/imageViewPoop"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/button_background"
+                android:background="@drawable/round_button_background"
                 android:contentDescription="poop"
                 android:padding="10dp"
                 android:tint="@color/white"
@@ -43,7 +43,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ru.zilzilok.android_internet_alerts.utils.HorizontalDottedProgressBar
+            <ru.zilzilok.android_internet_alerts.utils.layouts.HorizontalDottedProgressBar
                 android:id="@+id/progressStateProgressBar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

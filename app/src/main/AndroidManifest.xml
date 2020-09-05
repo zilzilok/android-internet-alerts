@@ -24,10 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".activities.PopupStatesActivity"
+            android:theme="@style/AppTheme.PopupStates" />
+
+        <activity
+            android:name=".activities.StatisticsActivity"
+            android:theme="@style/AppTheme.StatisticsTheme" />
     </application>
+
 </manifest>
