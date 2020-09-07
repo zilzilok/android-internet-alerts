@@ -28,12 +28,13 @@
                 android:tint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_poop" />
+                app:srcCompat="@drawable/ic_close" />
 
             <TextView
                 android:id="@+id/progressStateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -43,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ru.zilzilok.android_internet_alerts.utils.layouts.HorizontalDottedProgressBar
+            <ru.zilzilok.ict.utils.layouts.HorizontalDottedProgressBar
                 android:id="@+id/progressStateProgressBar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

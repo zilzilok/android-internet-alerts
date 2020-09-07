@@ -2,6 +2,7 @@
     <!--Main-->
     <string name="app_name">ICT</string>
     <string name="app_name_actionbar">ICTracker</string>
+    <string name="app_name_fullname">Internet Connection Tracker</string>
     <string name="approve">ZXC</string>
 
     <!--Main Buttons-->
@@ -21,9 +22,9 @@
     <string name="change_language">Изменить язык</string>
 
     <!--Etc.-->
-    <string name="wait">Ожидание</string>
+    <string name="wait">ОЖИДАНИЕ</string>
     <string name="wait_loading">Сек…</string>
-    <string name="appeard">" появился ¯\_(ツ)_/¯"</string>
+    <string name="appeard">" появился!"</string>
     <string name="curr_lang">Русский</string>
     <string name="more">ещё</string>
     <string name="start">Начать</string>

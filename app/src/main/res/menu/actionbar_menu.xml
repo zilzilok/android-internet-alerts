@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/settings1"
-        android:icon="@drawable/ic_action_poop"
+        android:icon="@drawable/ic_information"
         android:title="@string/info"
         app:showAsAction="always" />
     <item
