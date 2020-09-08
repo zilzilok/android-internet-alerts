@@ -19,30 +19,46 @@
             android:layout_height="match_parent"
             android:background="@drawable/button_background">
 
-            <TextView
-                android:id="@+id/progressButtonTextView"
+            <LinearLayout
+                android:id="@+id/progressButtonLinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/approve"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/progressButtonImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_check" />
+
+                <TextView
+                    android:id="@+id/progressButtonTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/approve"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
 
             <ProgressBar
                 android:id="@+id/progressButtonProgressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="5dp"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/white"
                 android:indeterminateTintMode="src_atop"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/progressButtonTextView"
+                app:layout_constraintEnd_toStartOf="@+id/progressButtonLinearLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:targetApi="lollipop" />
         </androidx.constraintlayout.widget.ConstraintLayout>

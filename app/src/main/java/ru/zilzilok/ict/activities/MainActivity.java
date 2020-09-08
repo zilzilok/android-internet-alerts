@@ -136,19 +136,19 @@ public class MainActivity extends AppCompatActivity {
         // Check button click listener
         View viewCheckButton = findViewById(R.id.buttonCheck);
         checkButton = new ProgressButton(MainActivity.this,
-                viewCheckButton, getResources().getString(R.string.check_button));
+                viewCheckButton, getResources().getString(R.string.check_button), R.drawable.ic_check);
         viewCheckButton.setOnClickListener(this::buttonCheckClicked);
 
         // Monitor button click listener
         View viewMonitorButton = findViewById(R.id.buttonAdd);
         monitorButton = new ProgressButton(MainActivity.this,
-                viewMonitorButton, getResources().getString(R.string.monitor_button));
+                viewMonitorButton, getResources().getString(R.string.monitor_button), R.drawable.ic_monitor);
         viewMonitorButton.setOnClickListener(this::buttonMonitorClicked);
 
         // Statistics button click listener
         View viewStatButton = findViewById(R.id.buttonStat);
         statButton = new ProgressButton(MainActivity.this,
-                viewStatButton, getResources().getString(R.string.stat_button));
+                viewStatButton, getResources().getString(R.string.stat_button), R.drawable.ic_stat);
         viewStatButton.setOnClickListener(this::statButtonClicked);
 
         // Current State
