@@ -1,10 +1,13 @@
 package ru.zilzilok.ict.utils.connection;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
@@ -52,10 +55,11 @@ public class ConnectionState {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_stat_connection)
-                        .setContentTitle(getConnectionType() + context.getResources().getString(R.string.appeard))
+                        .setContentTitle(context.getResources().getString(R.string.app_name_fullname))
+                        .setContentText(getConnectionType() + context.getResources().getString(R.string.appeard))
                         .setContentIntent(contentIntent)
-                        .setStyle(new NotificationCompat.InboxStyle())
-                        .setAutoCancel(true);
+                        .setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_SOUND);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(NOTIFY_ID, builder.build());
