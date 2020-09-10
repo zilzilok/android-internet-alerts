@@ -7,4 +7,9 @@
         <item>@string/_3g</item>
         <item>@string/_4g</item>
     </string-array>
+
+    <string-array name="stat_number_connection_types">
+        <item>@string/stat_number_appeared_connection_type</item>
+        <item>@string/stat_number_selected_connection_type</item>
+    </string-array>
 </resources>

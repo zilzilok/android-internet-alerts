@@ -3,7 +3,7 @@
     <string name="app_name">ICT</string>
     <string name="app_name_actionbar">ICTracker</string>
     <string name="app_name_fullname">Internet Connection Tracker</string>
-    <string name="approve">ZXC</string>
+    <string name="default_value">Default String</string>
 
     <!--Main Buttons-->
     <string name="monitor_button">Monitor</string>
@@ -20,6 +20,14 @@
     <!--ActionBar Titles-->
     <string name="info">Info</string>
     <string name="change_language">Change language</string>
+
+    <!--Statistics Activity-->
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="permission_text">Getting the current location</string>
+    <string name="stat_number_appeared_connection_type">Number of appeared</string>
+    <string name="stat_number_selected_connection_type">Number of selected</string>
+    <bool name="stat_no_internet_type_rus">false</bool>
 
     <!--Etc.-->
     <string name="wait">WAIT FOR</string>

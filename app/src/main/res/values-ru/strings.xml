@@ -3,7 +3,7 @@
     <string name="app_name">ICT</string>
     <string name="app_name_actionbar">ICTracker</string>
     <string name="app_name_fullname">Internet Connection Tracker</string>
-    <string name="approve">ZXC</string>
+    <string name="default_value">Обычная строка</string>
 
     <!--Main Buttons-->
     <string name="monitor_button">Наблюдать</string>
@@ -20,6 +20,14 @@
     <!--ActionBar Titles-->
     <string name="info">Информация</string>
     <string name="change_language">Изменить язык</string>
+
+    <!--Statistics Activity-->
+    <string name="on">Вкл</string>
+    <string name="off">Выкл</string>
+    <string name="permission_text">Получение текушего местоположения</string>
+    <string name="stat_number_appeared_connection_type">Количество появившихся</string>
+    <string name="stat_number_selected_connection_type">Количество выбранных</string>
+    <bool name="stat_no_internet_type_rus">true</bool>
 
     <!--Etc.-->
     <string name="wait">ОЖИДАНИЕ</string>
