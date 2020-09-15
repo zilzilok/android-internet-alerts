@@ -9,10 +9,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -25,13 +24,12 @@ import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
 import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
 
-import static android.widget.CompoundButton.*;
-
 public class StatisticsActivity extends AppCompatActivity {
     private static final int NUM_COLUMNS = 3;
 
     private ConnectionStatisticAdapter gridAdapter;
     private SwitchCompat switchCompat;
+    private LinearLayout locationData;
     private SharedPreferences spSpinner;
     private SharedPreferences spSwitchCompat;
 
@@ -101,25 +99,33 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void initializeSwitchCompat() {
         switchCompat = findViewById(R.id.statSwitchCompat);
+        locationData = findViewById(R.id.locationData);
         boolean checkPerm = GeoLocationPermission.checkPermission(StatisticsActivity.this);
         switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = spSwitchCompat.edit();
             editor.putBoolean(SAVE_KEY, isChecked);
             editor.apply();
-            if (isChecked && !checkPerm) {
-                GeoLocationPermission.requestPermission(StatisticsActivity.this);
-            }
+            if (isChecked) {
+                if (!checkPerm)
+                    GeoLocationPermission.requestPermission(StatisticsActivity.this);
+                else
+                    locationData.setVisibility(View.VISIBLE);
+            } else
+                locationData.setVisibility(View.GONE);
         });
-        switchCompat.setChecked(spSwitchCompat.getBoolean(SAVE_KEY, false) && checkPerm);
+        boolean isChecked = spSwitchCompat.getBoolean(SAVE_KEY, false) && checkPerm;
+        switchCompat.setChecked(isChecked);
+        locationData.setVisibility(isChecked ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == GeoLocationPermission.PERMISSION_REQUEST_CODE && grantResults.length > 0) {
             boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-            if (!locationAccepted) {
+            if (!locationAccepted)
                 switchCompat.setChecked(false);
-            }
+            else
+                locationData.setVisibility(View.VISIBLE);
         }
     }
 

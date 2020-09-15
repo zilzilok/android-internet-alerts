@@ -27,6 +27,8 @@
     <string name="permission_text">Данные о местоположении</string>
     <string name="stat_number_appeared_connection_type">Количество появившихся</string>
     <string name="stat_number_selected_connection_type">Количество выбранных</string>
+    <string name="stat_last_appeared_title">Местоположение последнего появившегося</string>
+    <string name="stat_last_selected_title">Местоположение последнего выбранного</string>
     <bool name="stat_no_internet_type_rus">true</bool>
 
     <!--Etc.-->
