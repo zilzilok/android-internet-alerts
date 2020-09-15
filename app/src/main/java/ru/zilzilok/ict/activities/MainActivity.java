@@ -18,13 +18,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionState;
 import ru.zilzilok.ict.utils.connection.ConnectionType;
-import ru.zilzilok.ict.utils.database.DBHelper;
+import ru.zilzilok.ict.utils.database.ConnectionInfoDBHelper;
 import ru.zilzilok.ict.utils.layouts.ProgressButton;
 
 import static java.lang.Thread.sleep;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     ConstraintLayout stateProgressLayout;
     TextView appNameTextView;
-    DBHelper database;
+    ConnectionInfoDBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("");
 
+        db = new ConnectionInfoDBHelper(this);
         initializeButtons();
     }
 
@@ -225,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 showConnectionStateLayout(checkedConnectionStates);
-//                database.updateDatabase(checkedConnectionStates);
+                db.updateDatabase(checkedConnectionStates, true);
                 startMonitor(checkedConnectionStates);
             }
         }
@@ -276,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startMonitor(@ NonNull List<ConnectionState> states) {
+    private void startMonitor(@NonNull List<ConnectionState> states) {
         Handler handler = new MonitorHandler(this);
         new Thread(() -> {
             handler.sendEmptyMessage(BLOCK_BUTTON);
@@ -294,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
             handler.sendEmptyMessage(GONE_STATE);
             if (!isExitClicked) {
                 resState.notifyAboutState(this);
+                db.updateDatabase(Collections.singletonList(resState), false);
             }
         }).start();
     }

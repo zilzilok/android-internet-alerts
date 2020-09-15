@@ -1,17 +1,19 @@
 package ru.zilzilok.ict.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.r0adkll.slidr.Slidr;
 
@@ -36,9 +38,11 @@ public class StatisticsActivity extends AppCompatActivity {
         Slidr.attach(this);
 
         GridView gridView = findViewById(R.id.statGridView);
-        gridView.setAdapter(new ConnectionStatisticAdapter(this));
+        ConnectionStatisticAdapter gridAdapter = new ConnectionStatisticAdapter(this);
+        gridView.setAdapter(gridAdapter);
         gridView.setNumColumns(NUM_COLUMNS);
         gridView.setOnTouchListener((v, event) -> event.getAction() == MotionEvent.ACTION_MOVE);
+
 
         Spinner spinner = findViewById(R.id.statSpinner);
         ArrayAdapter<?> spinnerAdapter =
@@ -46,6 +50,25 @@ public class StatisticsActivity extends AppCompatActivity {
                         android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        gridAdapter.updateView(1);
+                        break;
+                    case 1:
+                        gridAdapter.updateView(0);
+                        break;
+                    default:
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
