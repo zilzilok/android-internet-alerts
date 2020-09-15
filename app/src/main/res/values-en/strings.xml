@@ -24,7 +24,7 @@
     <!--Statistics Activity-->
     <string name="on">ON</string>
     <string name="off">OFF</string>
-    <string name="permission_text">Getting the current location</string>
+    <string name="permission_text">Location data</string>
     <string name="stat_number_appeared_connection_type">Number of appeared</string>
     <string name="stat_number_selected_connection_type">Number of selected</string>
     <bool name="stat_no_internet_type_rus">false</bool>

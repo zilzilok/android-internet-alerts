@@ -2,7 +2,7 @@ package ru.zilzilok.ict.utils.connection;
 
 import androidx.annotation.NonNull;
 
-public class ConnectionTypeConverter {
+public abstract class ConnectionTypeConverter {
     public static final class TYPES {
         public static final String WIFI = "wifi";
         public static final String NO_INTERNET = "no_internet";

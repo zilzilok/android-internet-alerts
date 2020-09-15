@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/statSpinner" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_compat"
+        android:id="@+id/statSwitchCompat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -39,8 +39,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:checked="false"
         android:text="@string/permission_text"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statGridView"
