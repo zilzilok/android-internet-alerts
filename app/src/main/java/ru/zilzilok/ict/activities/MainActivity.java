@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         initializeAppLanguage();
         setContentView(R.layout.activity_main);
-        setTitle("");
+        setTitle(R.string.app_name_actionbar);
 
         db = new ConnectionInfoDBHelper(this);
         initializeButtons();

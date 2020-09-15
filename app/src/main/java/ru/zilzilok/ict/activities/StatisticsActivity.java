@@ -3,6 +3,7 @@ package ru.zilzilok.ict.activities;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,6 +21,8 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.r0adkll.slidr.Slidr;
 
+import java.util.Locale;
+
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
 import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
@@ -36,6 +39,7 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeAppLanguage();
         setContentView(R.layout.activity_statistics);
 
         setTitle(R.string.stat_button);
@@ -52,6 +56,16 @@ public class StatisticsActivity extends AppCompatActivity {
         initializeGridView();
         initializeSpinner();
         initializeSwitchCompat();
+    }
+
+    private void initializeAppLanguage() {
+        SharedPreferences sp = getSharedPreferences("lang", 0);
+        String lang = sp.getString("lang", "ru");
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     @SuppressLint("ClickableViewAccessibility")
