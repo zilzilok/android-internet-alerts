@@ -29,6 +29,13 @@ public class PopupStatesActivity extends AppCompatActivity {
         initializeStatesList();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+        overridePendingTransition(0, R.anim.activity_fade_in);
+    }
+
     private void initializeStatesList() {
         listView = findViewById(R.id.statesListView);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -60,6 +67,7 @@ public class PopupStatesActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED);
         }
         finish();
+        overridePendingTransition(0, R.anim.activity_fade_in);
     }
 
     private void showWindow() {

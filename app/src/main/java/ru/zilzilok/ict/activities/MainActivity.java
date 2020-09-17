@@ -1,8 +1,6 @@
 package ru.zilzilok.ict.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,13 +18,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionState;
 import ru.zilzilok.ict.utils.connection.ConnectionType;
 import ru.zilzilok.ict.utils.database.ConnectionInfoDBHelper;
 import ru.zilzilok.ict.utils.layouts.ProgressButton;
+import ru.zilzilok.ict.utils.locale.LanguageSettings;
 
 import static java.lang.Thread.sleep;
 
@@ -42,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
-        initializeAppLanguage();
+        LanguageSettings.initializeAppLanguage(this);
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name_actionbar);
 
         db = new ConnectionInfoDBHelper(this);
-        initializeButtons();
+        initializeAppButtons();
     }
 
     @Override
@@ -62,69 +61,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings1:
-                Toast.makeText(this, "\"Internet Connection Tracker\"\nby @zilzilok", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "by @zilzilok", Toast.LENGTH_LONG).show();
                 break;
             case R.id.settings2:
-                SharedPreferences sp = getSharedPreferences("lang", MODE_PRIVATE);
-                String countryCode = sp.getString("lang", "ru");
-                SharedPreferences.Editor editor = sp.edit();
-                switch (countryCode) {
-                    case "ru":
-                        countryCode = "en";
-                        break;
-                    case "en":
-                        countryCode = "ru";
-                        break;
-                }
-                editor.putString("lang", countryCode);
-                editor.apply();
-                changeLang(countryCode);
+                LanguageSettings.changeAppLanguage(this);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /*
-      _
-     | |       __ _   _ __     __ _   _   _    __ _    __ _    ___
-     | |      / _` | | '_ \   / _` | | | | |  / _` |  / _` |  / _ \
-     | |___  | (_| | | | | | | (_| | | |_| | | (_| | | (_| | |  __/
-     |_____|  \__,_| |_| |_|  \__, |  \__,_|  \__,_|  \__, |  \___|
-                              |___/                   |___/
-    */
-    private void initializeAppLanguage() {
-        SharedPreferences sp = getSharedPreferences("lang", 0);
-        String lang = sp.getString("lang", "ru");
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-    }
-
-    private void saveLocale(@NonNull String lang) {
-        String langPref = "Language";
-        SharedPreferences prefs = getSharedPreferences("def_loc", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(langPref, lang);
-        editor.apply();
-    }
-
-    private void changeLang(@NonNull String lang) {
-        if (lang.equalsIgnoreCase(""))
-            return;
-        Locale myLocale = new Locale(lang);
-
-        Locale.setDefault(myLocale);
-        android.content.res.Configuration config = new android.content.res.Configuration();
-        config.locale = myLocale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
-        saveLocale(lang);
-
-        startActivity(new Intent(this, SplashActivity.class));
-        finish();
-        Toast.makeText(this, getResources().getString(R.string.curr_lang), Toast.LENGTH_SHORT).show();
-        overridePendingTransition(0, 0);
     }
 
     /*
@@ -134,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
      | |_) | | |_| | | |_  | |_  | (_) | | | | | \__ \
      |____/   \__,_|  \__|  \__|  \___/  |_| |_| |___/
     */
-    private void initializeButtons() {
+    private void initializeAppButtons() {
         // Check button click listener
         View viewCheckButton = findViewById(R.id.buttonCheck);
         checkButton = new ProgressButton(MainActivity.this,
