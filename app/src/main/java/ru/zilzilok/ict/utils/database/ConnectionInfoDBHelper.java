@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ru.zilzilok.ict.utils.connection.ConnectionState;
@@ -17,6 +17,7 @@ import ru.zilzilok.ict.utils.connection.ConnectionTypeConverter;
 import ru.zilzilok.ict.utils.database.data.StatisticsContract.ConnectionInfo;
 
 public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
+    private static final String TAG = "ConnectionInfoDBHelper";
     private static final String DATABASE_NAME = "statistics.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -26,6 +27,9 @@ public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String funcName = "[onCreate]";
+        Log.e(TAG, String.format("%s Database %s was created.", funcName, DATABASE_NAME));
+
         String SQL_CREATE_TABLE = "CREATE TABLE " + ConnectionInfo.TABLE_NAME + " ("
                 + ConnectionInfo._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ConnectionInfo.COLUMN_NAME + " TEXT NOT NULL, "
@@ -66,6 +70,8 @@ public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateDatabase(@NonNull List<ConnectionState> connectionStates, boolean isSelected) {
+        String funcName = "[updateDatabase]";
+
         SQLiteDatabase db = this.getWritableDatabase();
         for (ConnectionState cs : connectionStates) {
             String name = ConnectionTypeConverter.get(cs.getConnectionType());
@@ -88,5 +94,7 @@ public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
                         cv);
             }
         }
+
+        Log.e(TAG, String.format("%s Database %s was updated.", funcName, DATABASE_NAME));
     }
 }

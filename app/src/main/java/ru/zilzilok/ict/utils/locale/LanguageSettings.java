@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -13,7 +14,11 @@ import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.activities.MainActivity;
 
 public abstract class LanguageSettings {
+    private static final String TAG = "LanguageSettings";
+
     public static void changeAppLanguage(Activity ac) {
+        String funcName = "[changeAppLanguage]";
+
         // Get locale due to shared pref
         SharedPreferences sp = ac.getSharedPreferences("lang", Context.MODE_PRIVATE);
         String lang = sp.getString("lang", "ru");
@@ -31,12 +36,18 @@ public abstract class LanguageSettings {
         ac.startActivity(new Intent(ac, MainActivity.class));
         ac.finish();
         ac.overridePendingTransition(0, R.anim.activity_fade_in);
+
+        Log.e(TAG, String.format("%s App language changed to %s.", funcName, lang));
     }
 
     public static void initializeAppLanguage(Activity ac) {
+        String funcName = "[initializeAppLanguage]";
+
         SharedPreferences sp = ac.getSharedPreferences("lang", Context.MODE_PRIVATE);
         String lang = sp.getString("lang", "ru");
         setLocale(ac, lang);
+
+        Log.e(TAG, String.format("%s App language initialized to %s.", funcName, lang));
     }
 
     private static void setLocale(Activity ac, String lang) {

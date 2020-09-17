@@ -3,8 +3,8 @@ package ru.zilzilok.ict.activities;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +21,6 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.r0adkll.slidr.Slidr;
 
-import java.util.Locale;
-
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
@@ -30,6 +28,8 @@ import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
 
 public class StatisticsActivity extends AppCompatActivity {
     private static final int NUM_COLUMNS = 3;
+    private static final String SAVE_KEY = "save_text";
+    private static final String TAG = "StatisticsActivity";
 
     private ConnectionStatisticAdapter gridAdapter;
     private SwitchCompat switchCompat;
@@ -79,6 +79,10 @@ public class StatisticsActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String funcName = "[initializeSpinner.onItemSelected]";
+
+                Log.e(TAG, String.format("%s %d item was selected.", funcName, position + 1));
+
                 SharedPreferences.Editor editor = spSpinner.edit();
                 editor.putInt(SAVE_KEY, position);
                 editor.apply();
@@ -100,37 +104,51 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-    private static final String SAVE_KEY = "save_text";
-
     private void initializeSwitchCompat() {
+        String funcName = "[initializeSwitchCompat]";
+
         switchCompat = findViewById(R.id.statSwitchCompat);
         locationData = findViewById(R.id.locationData);
         boolean checkPerm = GeoLocationPermission.checkPermission(StatisticsActivity.this);
         switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.e(TAG, String.format("%s SwitchCompat checked status - %b.", funcName, checkPerm));
+
             SharedPreferences.Editor editor = spSwitchCompat.edit();
             editor.putBoolean(SAVE_KEY, isChecked);
             editor.apply();
             if (isChecked) {
                 if (!checkPerm)
                     GeoLocationPermission.requestPermission(StatisticsActivity.this);
-                else
+                else {
                     locationData.setVisibility(View.VISIBLE);
-            } else
+
+                    Log.e(TAG, String.format("%s Location data visible.", funcName));
+                }
+            } else {
                 locationData.setVisibility(View.GONE);
+
+                Log.e(TAG, String.format("%s Location data invisible.", funcName));
+            }
         });
         boolean isChecked = spSwitchCompat.getBoolean(SAVE_KEY, false) && checkPerm;
         switchCompat.setChecked(isChecked);
         locationData.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        Log.e(TAG, String.format("%s Location data %s.", funcName, isChecked ? "visible" : "invisible"));
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        String funcName = "onRequestPermissionsResult";
+
         if (requestCode == GeoLocationPermission.PERMISSION_REQUEST_CODE && grantResults.length > 0) {
             boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
             if (!locationAccepted)
                 switchCompat.setChecked(false);
-            else
+            else {
                 locationData.setVisibility(View.VISIBLE);
+
+                Log.e(TAG, String.format("%s Location data visible.", funcName));
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -18,9 +19,10 @@ import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.activities.MainActivity;
 
 public class ConnectionState {
-    private static final String CHANNEL_ID = "ZXC";
-    private static final String CHANNEL_NAME = "ZXC";
-    private static final String CHANNEL_DESCRIPTION = "ZXC";
+    private static final String TAG = "ConnectionState";
+    private static final String CHANNEL_ID = "def_id";
+    private static final String CHANNEL_NAME = "ICT";
+    private static final String CHANNEL_DESCRIPTION = "Notification that connection appeared.";
     private static final int NOTIFY_ID = 1337;
 
     private String connectionType;
@@ -34,6 +36,8 @@ public class ConnectionState {
     }
 
     public void notifyAboutState(Context context) {
+        String funcName = "[notifyAboutState]";
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
@@ -63,6 +67,8 @@ public class ConnectionState {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(NOTIFY_ID, builder.build());
+
+        Log.e(TAG, String.format("%s Notified about %s.", funcName, getConnectionType()));
     }
 
     @Override

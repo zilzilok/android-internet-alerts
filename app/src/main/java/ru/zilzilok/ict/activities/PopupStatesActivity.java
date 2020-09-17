@@ -3,6 +3,7 @@ package ru.zilzilok.ict.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,6 +18,8 @@ import ru.zilzilok.ict.R;
 
 
 public class PopupStatesActivity extends AppCompatActivity {
+    private static final String TAG = "PopupStatesActivity";
+
     private ListView listView;
     String[] values;
 
@@ -53,6 +56,9 @@ public class PopupStatesActivity extends AppCompatActivity {
     }
 
     private void stateButtonClicked(@NonNull View view) {
+        String funcName = "[stateButtonClicked]";
+        Log.e(TAG, String.format("%s Start button in ConnectionStateLayout was clicked.", funcName));
+
         Intent intent = new Intent();
         if (listView.getCheckedItemCount() > 0) {
             String[] checkedValues = new String[listView.getCheckedItemCount()];
