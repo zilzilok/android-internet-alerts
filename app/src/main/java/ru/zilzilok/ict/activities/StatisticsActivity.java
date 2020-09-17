@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
+import ru.zilzilok.ict.utils.locale.LanguageSettings;
 import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeAppLanguage();
+        LanguageSettings.initializeAppLanguage(this);
         setContentView(R.layout.activity_statistics);
 
         setTitle(R.string.stat_button);
@@ -56,16 +57,6 @@ public class StatisticsActivity extends AppCompatActivity {
         initializeGridView();
         initializeSpinner();
         initializeSwitchCompat();
-    }
-
-    private void initializeAppLanguage() {
-        SharedPreferences sp = getSharedPreferences("lang", 0);
-        String lang = sp.getString("lang", "ru");
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     @SuppressLint("ClickableViewAccessibility")
