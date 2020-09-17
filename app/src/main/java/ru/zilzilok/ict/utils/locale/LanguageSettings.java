@@ -37,7 +37,7 @@ public abstract class LanguageSettings {
         ac.finish();
         ac.overridePendingTransition(0, R.anim.activity_fade_in);
 
-        Log.e(TAG, String.format("%s App language changed to %s.", funcName, lang));
+        Log.i(TAG, String.format("%s App language changed to %s.", funcName, lang));
     }
 
     public static void initializeAppLanguage(Activity ac) {
@@ -47,7 +47,7 @@ public abstract class LanguageSettings {
         String lang = sp.getString("lang", "ru");
         setLocale(ac, lang);
 
-        Log.e(TAG, String.format("%s App language initialized to %s.", funcName, lang));
+        Log.i(TAG, String.format("%s App language initialized to %s.", funcName, lang));
     }
 
     private static void setLocale(Activity ac, String lang) {

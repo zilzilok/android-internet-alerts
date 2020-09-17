@@ -28,7 +28,7 @@ public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String funcName = "[onCreate]";
-        Log.e(TAG, String.format("%s Database %s was created.", funcName, DATABASE_NAME));
+        Log.i(TAG, String.format("%s Database %s was created.", funcName, DATABASE_NAME));
 
         String SQL_CREATE_TABLE = "CREATE TABLE " + ConnectionInfo.TABLE_NAME + " ("
                 + ConnectionInfo._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -95,6 +95,6 @@ public class ConnectionInfoDBHelper extends SQLiteOpenHelper {
             }
         }
 
-        Log.e(TAG, String.format("%s Database %s was updated.", funcName, DATABASE_NAME));
+        Log.i(TAG, String.format("%s Database %s was updated.", funcName, DATABASE_NAME));
     }
 }

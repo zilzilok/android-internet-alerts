@@ -81,7 +81,7 @@ public class StatisticsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String funcName = "[initializeSpinner.onItemSelected]";
 
-                Log.e(TAG, String.format("%s %d item was selected.", funcName, position + 1));
+                Log.i(TAG, String.format("%s %d item was selected.", funcName, position + 1));
 
                 SharedPreferences.Editor editor = spSpinner.edit();
                 editor.putInt(SAVE_KEY, position);
@@ -111,7 +111,7 @@ public class StatisticsActivity extends AppCompatActivity {
         locationData = findViewById(R.id.locationData);
         boolean checkPerm = GeoLocationPermission.checkPermission(StatisticsActivity.this);
         switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.e(TAG, String.format("%s SwitchCompat checked status - %b.", funcName, checkPerm));
+            Log.i(TAG, String.format("%s SwitchCompat checked status - %b.", funcName, checkPerm));
 
             SharedPreferences.Editor editor = spSwitchCompat.edit();
             editor.putBoolean(SAVE_KEY, isChecked);
@@ -122,18 +122,18 @@ public class StatisticsActivity extends AppCompatActivity {
                 else {
                     locationData.setVisibility(View.VISIBLE);
 
-                    Log.e(TAG, String.format("%s Location data visible.", funcName));
+                    Log.i(TAG, String.format("%s Location data visible.", funcName));
                 }
             } else {
                 locationData.setVisibility(View.GONE);
 
-                Log.e(TAG, String.format("%s Location data invisible.", funcName));
+                Log.i(TAG, String.format("%s Location data invisible.", funcName));
             }
         });
         boolean isChecked = spSwitchCompat.getBoolean(SAVE_KEY, false) && checkPerm;
         switchCompat.setChecked(isChecked);
         locationData.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        Log.e(TAG, String.format("%s Location data %s.", funcName, isChecked ? "visible" : "invisible"));
+        Log.i(TAG, String.format("%s Location data %s.", funcName, isChecked ? "visible" : "invisible"));
     }
 
     @Override
@@ -147,7 +147,7 @@ public class StatisticsActivity extends AppCompatActivity {
             else {
                 locationData.setVisibility(View.VISIBLE);
 
-                Log.e(TAG, String.format("%s Location data visible.", funcName));
+                Log.i(TAG, String.format("%s Location data visible.", funcName));
             }
         }
     }

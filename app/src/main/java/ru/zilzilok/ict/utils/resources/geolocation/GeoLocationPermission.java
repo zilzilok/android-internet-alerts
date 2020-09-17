@@ -23,6 +23,6 @@ public abstract class GeoLocationPermission {
         String funcName = "[requestPermission]";
 
         ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
-        Log.e(TAG, String.format("%s Geolocation permission was requested.", funcName));
+        Log.i(TAG, String.format("%s Geolocation permission was requested.", funcName));
     }
 }

@@ -6,8 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -68,7 +66,7 @@ public class ConnectionState {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(NOTIFY_ID, builder.build());
 
-        Log.e(TAG, String.format("%s Notified about %s.", funcName, getConnectionType()));
+        Log.i(TAG, String.format("%s Notified about %s.", funcName, getConnectionType()));
     }
 
     @Override

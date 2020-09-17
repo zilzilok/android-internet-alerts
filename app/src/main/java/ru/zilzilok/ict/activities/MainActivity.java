@@ -26,6 +26,7 @@ import ru.zilzilok.ict.utils.connection.ConnectionType;
 import ru.zilzilok.ict.utils.database.ConnectionInfoDBHelper;
 import ru.zilzilok.ict.utils.layouts.ProgressButton;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
+import ru.zilzilok.ict.utils.resources.geolocation.GeoLocation;
 
 import static java.lang.Thread.sleep;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressButton checkButton;
     private ProgressButton monitorButton;
     private ProgressButton statButton;
+//    private GeoLocation geoLocation;
 
     ConstraintLayout stateProgressLayout;
     TextView appNameTextView;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         db = new ConnectionInfoDBHelper(this);
         initializeAppButtons();
+
+//        geoLocation = new GeoLocation(this);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.settings1:
                 Toast.makeText(this, "by @zilzilok", Toast.LENGTH_LONG).show();
-                Log.e(TAG, String.format("%s Info Toast appeared.", funcName));
+                Log.i(TAG, String.format("%s Info Toast appeared.", funcName));
                 break;
             case R.id.settings2:
                 LanguageSettings.changeAppLanguage(this);
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView stateButton = stateProgressLayout.findViewById(R.id.imageViewPoop);
         stateButton.setOnClickListener(this::buttonCloseClicked);
 
-        Log.e(TAG, String.format("%s Main buttons initialized.", funcName));
+        Log.i(TAG, String.format("%s Main buttons initialized.", funcName));
     }
 
     /*
@@ -126,19 +130,19 @@ public class MainActivity extends AppCompatActivity {
     */
     private void buttonCheckClicked(@NonNull View view) {
         String funcName = "[buttonCheckClicked]";
-        Log.e(TAG, String.format("%s Check button was clicked.", funcName));
+        Log.i(TAG, String.format("%s Check button was clicked.", funcName));
 
         checkButton.buttonActivated();
         checkButton.blockButton();
-        Log.e(TAG, String.format("%s Check button was blocked.", funcName));
+        Log.i(TAG, String.format("%s Check button was blocked.", funcName));
         Handler handler = new Handler();
         handler.postDelayed(() -> {
             String ct = ConnectionType.getNetworkClass(this);
             Toast.makeText(this, ct, Toast.LENGTH_LONG).show();
-            Log.e(TAG, String.format("%s Current connection state - %s.", funcName, ct));
+            Log.i(TAG, String.format("%s Current connection state - %s.", funcName, ct));
             checkButton.buttonRestored();
             checkButton.unblockButton();
-            Log.e(TAG, String.format("%s Check button was unblocked.", funcName));
+            Log.i(TAG, String.format("%s Check button was unblocked.", funcName));
         }, 800);
     }
 
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void statButtonClicked(@NonNull View view) {
         String funcName = "[statButtonClicked]";
-        Log.e(TAG, String.format("%s Stat button was clicked.", funcName));
+        Log.i(TAG, String.format("%s Stat button was clicked.", funcName));
 
         Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
@@ -164,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void buttonCloseClicked(@NonNull View view) {
         String funcName = "[buttonCloseClicked]";
-        Log.e(TAG, String.format("%s Close button was clicked.", funcName));
+        Log.i(TAG, String.format("%s Close button was clicked.", funcName));
 
         isExitClicked = true;
     }
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void buttonMonitorClicked(@NonNull View view) {
         String funcName = "[buttonMonitorClicked]";
-        Log.e(TAG, String.format("%s Monitor button was clicked.", funcName));
+        Log.i(TAG, String.format("%s Monitor button was clicked.", funcName));
 
         isExitClicked = false;
         Intent intent = new Intent(this, PopupStatesActivity.class);
@@ -201,10 +205,10 @@ public class MainActivity extends AppCompatActivity {
                 db.updateDatabase(checkedConnectionStates, true);
                 startMonitor(checkedConnectionStates);
             }else{
-                Log.e(TAG, String.format("%s No checked connection states.", funcName));
+                Log.i(TAG, String.format("%s No checked connection states.", funcName));
             }
         } else {
-            Log.e(TAG, String.format("%s No checked connection states.", funcName));
+            Log.i(TAG, String.format("%s No checked connection states.", funcName));
         }
     }
 
@@ -220,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 checkedConnectionStates.get(0).getConnectionType(),
                 addition));
 
-        Log.e(TAG, String.format("%s ConnectionStateLayout was initialized.", funcName));
+        Log.i(TAG, String.format("%s ConnectionStateLayout was initialized.", funcName));
     }
 
     private static final int BLOCK_BUTTON = 1;
@@ -260,14 +264,14 @@ public class MainActivity extends AppCompatActivity {
     private void startMonitor(@NonNull List<ConnectionState> states) {
         String funcName = "[startMonitor]";
 
-        Log.e(TAG, String.format("%s App started monitoring for connection states.", funcName));
+        Log.i(TAG, String.format("%s App started monitoring for connection states.", funcName));
 
         Handler handler = new MonitorHandler(this);
         new Thread(() -> {
             handler.sendEmptyMessage(BLOCK_BUTTON);
-            Log.e(TAG, String.format("%s Monitor button was blocked.", funcName));
+            Log.i(TAG, String.format("%s Monitor button was blocked.", funcName));
             handler.sendEmptyMessage(VISIBLE_STATE);
-            Log.e(TAG, String.format("%s ConnectionStateLayout visible.", funcName));
+            Log.i(TAG, String.format("%s ConnectionStateLayout visible.", funcName));
             ConnectionState resState = new ConnectionState(ConnectionType.getNetworkClass(this));
             while (!isExitClicked &&
                     !states.contains(resState = new ConnectionState(ConnectionType.getNetworkClass(this)))) {
@@ -277,11 +281,11 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            Log.e(TAG, String.format("%s Connection state %s appeared.", funcName, resState.getConnectionType()));
+            Log.i(TAG, String.format("%s Connection state %s appeared.", funcName, resState.getConnectionType()));
             handler.sendEmptyMessage(UNBLOCK_BUTTON);
-            Log.e(TAG, String.format("%s Monitor button was unblocked.", funcName));
+            Log.i(TAG, String.format("%s Monitor button was unblocked.", funcName));
             handler.sendEmptyMessage(GONE_STATE);
-            Log.e(TAG, String.format("%s ConnectionStateLayout invisible.", funcName));
+            Log.i(TAG, String.format("%s ConnectionStateLayout invisible.", funcName));
             if (!isExitClicked) {
                 resState.notifyAboutState(this);
                 db.updateDatabase(Collections.singletonList(resState), false);

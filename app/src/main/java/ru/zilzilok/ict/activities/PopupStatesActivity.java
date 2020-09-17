@@ -57,7 +57,7 @@ public class PopupStatesActivity extends AppCompatActivity {
 
     private void stateButtonClicked(@NonNull View view) {
         String funcName = "[stateButtonClicked]";
-        Log.e(TAG, String.format("%s Start button in ConnectionStateLayout was clicked.", funcName));
+        Log.i(TAG, String.format("%s Start button in ConnectionStateLayout was clicked.", funcName));
 
         Intent intent = new Intent();
         if (listView.getCheckedItemCount() > 0) {
