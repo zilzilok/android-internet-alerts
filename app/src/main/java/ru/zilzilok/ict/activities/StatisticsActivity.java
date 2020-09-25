@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -23,6 +24,7 @@ import com.r0adkll.slidr.Slidr;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
+import ru.zilzilok.ict.utils.database.Databases;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
 import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
 
@@ -134,6 +136,12 @@ public class StatisticsActivity extends AppCompatActivity {
         switchCompat.setChecked(isChecked);
         locationData.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         Log.i(TAG, String.format("%s Location data %s.", funcName, isChecked ? "visible" : "invisible"));
+
+        TextView lastSelected = locationData.findViewById(R.id.statLastSelectedTextView);
+        TextView lastAppeared = locationData.findViewById(R.id.statLastAppearedTextView);
+
+        lastSelected.setText(Databases.getInstance().statisticsDBHelper.getGeolocation(true));
+        lastAppeared.setText(Databases.getInstance().statisticsDBHelper.getGeolocation(false));
     }
 
     @Override

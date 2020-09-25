@@ -39,4 +39,7 @@ dependencies {
     implementation 'com.r0adkll:slidableactivity:2.1.0'
 
     implementation 'org.jetbrains:annotations:15.0'
+
+    // play services location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

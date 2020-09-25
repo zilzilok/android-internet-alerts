@@ -3,12 +3,23 @@ package ru.zilzilok.ict.utils.database.data;
 import android.provider.BaseColumns;
 
 public class StatisticsContract {
-    public static final class ConnectionInfo implements BaseColumns {
-        public final static String TABLE_NAME = "connection_info";
+    public static final String DATABASE_NAME = "statistics.db";
+    public static final int DATABASE_VERSION = 1;
 
-        public final static String _ID = BaseColumns._ID;
-        public final static String COLUMN_NAME = "name";
-        public final static String COLUMN_APPEARED = "appeared";
-        public final static String COLUMN_SELECTED = "selected";
+    public static final class ConnectionInfo implements BaseColumns {
+        public static final String TABLE_NAME = "connection_info";
+
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_APPEARED = "appeared";
+        public static final String COLUMN_SELECTED = "selected";
+    }
+
+    public static final class GeolocationInfo implements BaseColumns {
+        public static final String TABLE_NAME = "geolocation_info";
+
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_LAST_VALUE = "value";
     }
 }

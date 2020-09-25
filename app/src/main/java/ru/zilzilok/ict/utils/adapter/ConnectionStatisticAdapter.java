@@ -12,11 +12,10 @@ import androidx.annotation.NonNull;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionTypeConverter;
-import ru.zilzilok.ict.utils.database.ConnectionInfoDBHelper;
+import ru.zilzilok.ict.utils.database.Databases;
 
 public class ConnectionStatisticAdapter extends BaseAdapter {
     private Context context;
-    private ConnectionInfoDBHelper db;
     private int firstVisible = 1;
 
     private Integer[] imageIds;
@@ -26,7 +25,6 @@ public class ConnectionStatisticAdapter extends BaseAdapter {
 
     public ConnectionStatisticAdapter(@NonNull Context context) {
         this.context = context;
-        db = new ConnectionInfoDBHelper(context);
         boolean isRus = context.getResources().getBoolean(R.bool.stat_no_internet_type_rus);
         imageIds = new Integer[]{R.drawable.ic_statgroup_2g, R.drawable.ic_statgroup_3g,
                 R.drawable.ic_statgroup_4g, R.drawable.ic_statgroup_wifi,
@@ -72,8 +70,10 @@ public class ConnectionStatisticAdapter extends BaseAdapter {
             textViewSelected.setVisibility(View.VISIBLE);
         }
         imageView.setImageResource(imageIds[position]);
-        textViewAppeared.setText(String.valueOf(db.getInt(names[position], false)));
-        textViewSelected.setText(String.valueOf(db.getInt(names[position], true)));
+        textViewAppeared.setText(String.valueOf(Databases.getInstance()
+                .statisticsDBHelper.getConnectionInt(names[position], false)));
+        textViewSelected.setText(String.valueOf(Databases.getInstance()
+                .statisticsDBHelper.getConnectionInt(names[position], true)));
         return grid;
     }
 

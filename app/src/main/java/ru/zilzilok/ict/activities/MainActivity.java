@@ -1,5 +1,6 @@
 package ru.zilzilok.ict.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,40 +24,44 @@ import java.util.List;
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionState;
 import ru.zilzilok.ict.utils.connection.ConnectionType;
-import ru.zilzilok.ict.utils.database.ConnectionInfoDBHelper;
+import ru.zilzilok.ict.utils.database.Databases;
 import ru.zilzilok.ict.utils.layouts.ProgressButton;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
-import ru.zilzilok.ict.utils.resources.geolocation.GeoLocation;
+import ru.zilzilok.ict.utils.resources.Resources;
+import ru.zilzilok.ict.utils.resources.geolocation.LocationHandler;
 
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static Context context;
 
     private boolean isExitClicked;
     private ProgressButton checkButton;
     private ProgressButton monitorButton;
     private ProgressButton statButton;
-//    private GeoLocation geoLocation;
 
     ConstraintLayout stateProgressLayout;
     TextView appNameTextView;
-    ConnectionInfoDBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+        context = this;
 
         LanguageSettings.initializeAppLanguage(this);
 
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name_actionbar);
 
-        db = new ConnectionInfoDBHelper(this);
         initializeAppButtons();
 
-//        geoLocation = new GeoLocation(this);
+        LocationHandler locationHandler = new LocationHandler(this, Resources.INSTANCE.geoLocation);
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     @Override
@@ -202,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 initConnectionStateLayout(checkedConnectionStates);
-                db.updateDatabase(checkedConnectionStates, true);
+                Databases.getInstance().statisticsDBHelper.updateDatabase(checkedConnectionStates, true);
                 startMonitor(checkedConnectionStates);
-            }else{
+            } else {
                 Log.i(TAG, String.format("%s No checked connection states.", funcName));
             }
         } else {
@@ -288,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, String.format("%s ConnectionStateLayout invisible.", funcName));
             if (!isExitClicked) {
                 resState.notifyAboutState(this);
-                db.updateDatabase(Collections.singletonList(resState), false);
+                Databases.getInstance().statisticsDBHelper.updateDatabase(Collections.singletonList(resState), false);
             }
         }).start();
     }
