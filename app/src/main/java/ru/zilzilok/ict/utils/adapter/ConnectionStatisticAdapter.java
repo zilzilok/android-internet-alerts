@@ -14,9 +14,12 @@ import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionTypeConverter;
 import ru.zilzilok.ict.utils.database.Databases;
 
+/**
+ * Adapter for connection statistics in gridView.
+ */
 public class ConnectionStatisticAdapter extends BaseAdapter {
-    private Context context;
-    private int firstVisible = 1;
+    private Context context;        // context for resource access
+    private int firstVisible = 1;   // current spinner choice
 
     private Integer[] imageIds;
     private String[] names = {ConnectionTypeConverter.TYPES._2G, ConnectionTypeConverter.TYPES._3G,
@@ -77,6 +80,10 @@ public class ConnectionStatisticAdapter extends BaseAdapter {
         return grid;
     }
 
+    /**
+     * Updates connection statistics.
+     * @param firstVisible new current spinner choice
+     */
     public void updateView(int firstVisible) {
         this.firstVisible = firstVisible;
         notifyDataSetChanged();

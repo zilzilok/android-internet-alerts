@@ -1,14 +1,10 @@
 package ru.zilzilok.ict.utils.resources.geolocation;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
-
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -19,9 +15,12 @@ import com.google.android.gms.location.LocationServices;
 import java.util.List;
 import java.util.Objects;
 
-public class LocationHandler {
+/**
+ * Class that represent geolocation handler.
+ */
+public class GeoLocationHandler {
     private Activity activity;
-    private LocationChangedListener locationChangedListener;
+    private GeoLocationChangedListener geoLocationChangedListener;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location lastKnownLocation;
     private LocationCallback locationCallback;
@@ -30,9 +29,9 @@ public class LocationHandler {
 
     private Geocoder geocoder;
 
-    public LocationHandler(Activity activity, LocationChangedListener locationChangedListener) {
+    public GeoLocationHandler(Activity activity, GeoLocationChangedListener geoLocationChangedListener) {
         this.activity = activity;
-        this.locationChangedListener = locationChangedListener;
+        this.geoLocationChangedListener = geoLocationChangedListener;
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
         createLocationRequest();
         getDeviceLocation();
@@ -47,8 +46,8 @@ public class LocationHandler {
                     //The last location in the list is the newest
                     Location location = locationList.get(locationList.size() - 1);
                     lastKnownLocation = location;
-                    if (locationChangedListener != null) {
-                        locationChangedListener.onLocationChange(geocoder, location);
+                    if (geoLocationChangedListener != null) {
+                        geoLocationChangedListener.onLocationChange(geocoder, location);
                         if (updateStartedInternally) {
                             stopLocationUpdate();
                         }
@@ -74,25 +73,24 @@ public class LocationHandler {
                         updateStartedInternally = true;
                         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                     } else {
-                        locationChangedListener.onLocationChange(geocoder, lastKnownLocation);
+                        geoLocationChangedListener.onLocationChange(geocoder, lastKnownLocation);
                     }
                 } else {
-                    locationChangedListener.onError("Can't get Location");
+                    geoLocationChangedListener.onError("Can't get Location");
                 }
             });
         } catch (SecurityException e) {
             Log.e("Exception: %s", Objects.requireNonNull(e.getMessage()));
-            locationChangedListener.onError(e.getMessage());
+            geoLocationChangedListener.onError(e.getMessage());
 
         }
     }
 
     private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (GeoLocationPermission.checkPermission(activity)) {
+            updateStartedInternally = false;
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
         }
-        updateStartedInternally = false;
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
     private void stopLocationUpdate() {

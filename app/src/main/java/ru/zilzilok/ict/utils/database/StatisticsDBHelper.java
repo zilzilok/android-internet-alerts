@@ -16,6 +16,9 @@ import ru.zilzilok.ict.utils.connection.ConnectionTypeConverter;
 import ru.zilzilok.ict.utils.database.data.StatisticsContract;
 import ru.zilzilok.ict.utils.resources.Resources;
 
+/**
+ * Class that helps to work with statistics database.
+ */
 public class StatisticsDBHelper extends SQLiteOpenHelper {
     private static final String TAG = "GeolocationInfoDBHelper";
 
@@ -47,6 +50,10 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+    /**
+     * @param isSelected true if you need info about selected connection type, false otherwise
+     * @return last geolocation
+     */
     public String getGeolocation(boolean isSelected) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = {
@@ -74,6 +81,11 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
         return output;
     }
 
+    /**
+     * @param name of connection type
+     * @param isSelected true if you need info about selected connection type, false otherwise
+     * @return quantity of selected/appeared connection
+     */
     public int getConnectionInt(String name, boolean isSelected) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = {
@@ -100,6 +112,11 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
         return output;
     }
 
+    /**
+     * Updates database.
+     * @param connectionStates updated connection states
+     * @param isSelected true if you need info about selected connection type, false otherwise
+     */
     public void updateDatabase(@NonNull List<ConnectionState> connectionStates, boolean isSelected) {
         updateConnectionTable(connectionStates, isSelected);
         updateGeolocationTable(isSelected);

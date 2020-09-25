@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat;
 
 import ru.zilzilok.ict.R;
 
+/**
+ * Class for horizontal loading animation.
+ */
 public class HorizontalDottedProgressBar extends View {
     private static final int DOT_RADIUS = 10;
     private static final int BOUNCE_DOT_RADIUS = DOT_RADIUS * 2;

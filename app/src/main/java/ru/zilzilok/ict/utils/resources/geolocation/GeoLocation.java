@@ -11,7 +11,10 @@ import java.io.IOException;
 
 import ru.zilzilok.ict.utils.resources.ResourceNotAvailableException;
 
-public class GeoLocation implements LocationChangedListener {
+/**
+ * Class for geolocation receiving.
+ */
+public class GeoLocation implements GeoLocationChangedListener {
     private static final String TAG = "GeoLocation";
 
     Geocoder geocoder;

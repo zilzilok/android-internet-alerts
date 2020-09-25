@@ -1,5 +1,8 @@
 package ru.zilzilok.ict.utils.database;
 
+/**
+ * Singleton class for database.
+ */
 public class Databases {
     private static final Databases instance = new Databases();
 

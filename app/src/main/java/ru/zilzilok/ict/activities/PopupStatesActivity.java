@@ -16,12 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.zilzilok.ict.R;
 
-
+/**
+ * Activity to select what you want to track.
+ */
 public class PopupStatesActivity extends AppCompatActivity {
     private static final String TAG = "PopupStatesActivity";
 
-    private ListView listView;
-    String[] values;
+    private ListView listView;  // List of connection types
+    String[] values;            // Array with all connection types
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

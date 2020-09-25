@@ -2,6 +2,9 @@ package ru.zilzilok.ict.utils.connection;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Abstract class for converting connection types identically.
+ */
 public abstract class ConnectionTypeConverter {
     public static final class TYPES {
         public static final String WIFI = "wifi";

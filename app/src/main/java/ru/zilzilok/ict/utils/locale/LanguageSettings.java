@@ -13,9 +13,16 @@ import java.util.Locale;
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.activities.MainActivity;
 
+/**
+ * Abstract class for language/locale settings.
+ */
 public abstract class LanguageSettings {
     private static final String TAG = "LanguageSettings";
 
+    /**
+     * Changes the application language (RU to EN and vice versa).
+     * @param ac activity where need to change language
+     */
     public static void changeAppLanguage(Activity ac) {
         String funcName = "[changeAppLanguage]";
 
@@ -40,6 +47,10 @@ public abstract class LanguageSettings {
         Log.i(TAG, String.format("%s App language changed to %s.", funcName, lang));
     }
 
+    /**
+     * Initializes the application language.
+     * @param ac activity where need to initialize language
+     */
     public static void initializeAppLanguage(Activity ac) {
         String funcName = "[initializeAppLanguage]";
 

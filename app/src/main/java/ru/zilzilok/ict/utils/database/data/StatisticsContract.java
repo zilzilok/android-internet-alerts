@@ -2,10 +2,16 @@ package ru.zilzilok.ict.utils.database.data;
 
 import android.provider.BaseColumns;
 
+/**
+ * Class that represent statistics database contract.
+ */
 public class StatisticsContract {
     public static final String DATABASE_NAME = "statistics.db";
     public static final int DATABASE_VERSION = 1;
 
+    /**
+     * Columns in ConnectionInfo table.
+     */
     public static final class ConnectionInfo implements BaseColumns {
         public static final String TABLE_NAME = "connection_info";
 
@@ -15,6 +21,9 @@ public class StatisticsContract {
         public static final String COLUMN_SELECTED = "selected";
     }
 
+    /**
+     * Columns in GeolocationInfo table.
+     */
     public static final class GeolocationInfo implements BaseColumns {
         public static final String TABLE_NAME = "geolocation_info";
 

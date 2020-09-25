@@ -1,6 +1,7 @@
 package ru.zilzilok.ict.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -28,16 +30,20 @@ import ru.zilzilok.ict.utils.database.Databases;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
 import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationPermission;
 
+/**
+ * Activity for application statistics.
+ */
 public class StatisticsActivity extends AppCompatActivity {
     private static final int NUM_COLUMNS = 3;
     private static final String SAVE_KEY = "save_text";
     private static final String TAG = "StatisticsActivity";
 
-    private ConnectionStatisticAdapter gridAdapter;
-    private SwitchCompat switchCompat;
-    private LinearLayout locationData;
-    private SharedPreferences spSpinner;
-    private SharedPreferences spSwitchCompat;
+    private ConnectionStatisticAdapter gridAdapter; //  adapter for connection statistics
+    private SwitchCompat switchCompat;              //  button to show/remove the location data
+    private LinearLayout locationData;              //  location data about geolocation of last selected/appeared
+    private SharedPreferences spSpinner;            //  preference data about current spinner choice
+    private SharedPreferences spSwitchCompat;       //  preference data about current switchCompat choice
+    private AlertDialog restartAlert;               //  dialog for restarting application
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,7 @@ public class StatisticsActivity extends AppCompatActivity {
         initializeGridView();
         initializeSpinner();
         initializeSwitchCompat();
+        initializeRestartAlertDialog();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -144,6 +151,18 @@ public class StatisticsActivity extends AppCompatActivity {
         lastAppeared.setText(Databases.getInstance().statisticsDBHelper.getGeolocation(false));
     }
 
+    private void initializeRestartAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.restart_alert)
+                .setCancelable(false)
+                .setPositiveButton("OK", (dialog, id) -> {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                });
+        restartAlert = builder.create();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         String funcName = "onRequestPermissionsResult";
@@ -153,8 +172,8 @@ public class StatisticsActivity extends AppCompatActivity {
             if (!locationAccepted)
                 switchCompat.setChecked(false);
             else {
+                restartAlert.show();
                 locationData.setVisibility(View.VISIBLE);
-
                 Log.i(TAG, String.format("%s Location data visible.", funcName));
             }
         }

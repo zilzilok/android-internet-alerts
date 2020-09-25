@@ -23,26 +23,25 @@ import java.util.List;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.connection.ConnectionState;
-import ru.zilzilok.ict.utils.connection.ConnectionType;
 import ru.zilzilok.ict.utils.database.Databases;
 import ru.zilzilok.ict.utils.layouts.ProgressButton;
 import ru.zilzilok.ict.utils.locale.LanguageSettings;
 import ru.zilzilok.ict.utils.resources.Resources;
-import ru.zilzilok.ict.utils.resources.geolocation.LocationHandler;
+import ru.zilzilok.ict.utils.resources.geolocation.GeoLocationHandler;
 
-import static java.lang.Thread.sleep;
-
+/**
+ * Main application activity.
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static Context context;
 
-    private boolean isExitClicked;
-    private ProgressButton checkButton;
-    private ProgressButton monitorButton;
-    private ProgressButton statButton;
+    private boolean isExitClicked;          // determines whether the tracking exit button is pressed
+    private ProgressButton checkButton;     // button for checking current connection type
+    private ProgressButton trackButton;     // button for starting tracking for connections
 
-    ConstraintLayout stateProgressLayout;
-    TextView appNameTextView;
+    ConstraintLayout stateProgressLayout;   // layout for visualization of tracking
+    TextView appNameTextView;               // application text (instead of stateProgressLayout)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
         initializeAppButtons();
 
-        LocationHandler locationHandler = new LocationHandler(this, Resources.INSTANCE.geoLocation);
+        GeoLocationHandler geoLocationHandler = new GeoLocationHandler(this, Resources.INSTANCE.geoLocation);
     }
 
+    /**
+     * @return Application context.
+     */
     public static Context getContext() {
         return context;
     }
@@ -85,13 +87,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-      ____            _     _
-     | __ )   _   _  | |_  | |_    ___    _ __    ___
-     |  _ \  | | | | | __| | __|  / _ \  | '_ \  / __|
-     | |_) | | |_| | | |_  | |_  | (_) | | | | | \__ \
-     |____/   \__,_|  \__|  \__|  \___/  |_| |_| |___/
-    */
     private void initializeAppButtons() {
         String funcName = "[initializeAppButtons]";
 
@@ -101,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 viewCheckButton, getResources().getString(R.string.check_button), R.drawable.ic_check);
         viewCheckButton.setOnClickListener(this::buttonCheckClicked);
 
-        // Monitor button click listener
-        View viewMonitorButton = findViewById(R.id.buttonAdd);
-        monitorButton = new ProgressButton(MainActivity.this,
-                viewMonitorButton, getResources().getString(R.string.monitor_button), R.drawable.ic_monitor);
-        viewMonitorButton.setOnClickListener(this::buttonMonitorClicked);
+        // Track button click listener
+        View viewTrackButton = findViewById(R.id.buttonAdd);
+        trackButton = new ProgressButton(MainActivity.this,
+                viewTrackButton, getResources().getString(R.string.track_button), R.drawable.ic_track);
+        viewTrackButton.setOnClickListener(this::buttonTrackClicked);
 
         // Statistics button click listener
         View viewStatButton = findViewById(R.id.buttonStat);
-        statButton = new ProgressButton(MainActivity.this,
+        ProgressButton statButton = new ProgressButton(MainActivity.this,
                 viewStatButton, getResources().getString(R.string.stat_button), R.drawable.ic_stat);
         viewStatButton.setOnClickListener(this::statButtonClicked);
 
@@ -127,12 +122,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, String.format("%s Main buttons initialized.", funcName));
     }
 
-    /*
-           ___   _                 _
-          / __| | |_    ___   __  | |__
-         | (__  | ' \  / -_) / _| | / /
-          \___| |_||_| \___| \__| |_\_\
-    */
     private void buttonCheckClicked(@NonNull View view) {
         String funcName = "[buttonCheckClicked]";
         Log.i(TAG, String.format("%s Check button was clicked.", funcName));
@@ -142,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, String.format("%s Check button was blocked.", funcName));
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            String ct = ConnectionType.getNetworkClass(this);
+            String ct = ConnectionState.getCurrentConnectionType(this);
             Toast.makeText(this, ct, Toast.LENGTH_LONG).show();
             Log.i(TAG, String.format("%s Current connection state - %s.", funcName, ct));
             checkButton.buttonRestored();
@@ -151,12 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }, 800);
     }
 
-    /*
-          ___   _            _     _        _     _
-         / __| | |_   __ _  | |_  (_)  ___ | |_  (_)  __
-         \__ \ |  _| / _` | |  _| | | (_-< |  _| | | / _|
-         |___/  \__| \__,_|  \__| |_| /__/  \__| |_| \__|
-     */
     private void statButtonClicked(@NonNull View view) {
         String funcName = "[statButtonClicked]";
         Log.i(TAG, String.format("%s Stat button was clicked.", funcName));
@@ -178,15 +161,9 @@ public class MainActivity extends AppCompatActivity {
         isExitClicked = true;
     }
 
-    /*
-          __  __                _   _
-         |  \/  |  ___   _ _   (_) | |_   ___   _ _
-         | |\/| | / _ \ | ' \  | | |  _| / _ \ | '_|
-         |_|  |_| \___/ |_||_| |_|  \__| \___/ |_|
-     */
-    private void buttonMonitorClicked(@NonNull View view) {
-        String funcName = "[buttonMonitorClicked]";
-        Log.i(TAG, String.format("%s Monitor button was clicked.", funcName));
+    private void buttonTrackClicked(@NonNull View view) {
+        String funcName = "[buttonTrackClicked]";
+        Log.i(TAG, String.format("%s Track button was clicked.", funcName));
 
         isExitClicked = false;
         Intent intent = new Intent(this, PopupStatesActivity.class);
@@ -208,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
                 initConnectionStateLayout(checkedConnectionStates);
                 Databases.getInstance().statisticsDBHelper.updateDatabase(checkedConnectionStates, true);
-                startMonitor(checkedConnectionStates);
+                startTrack(checkedConnectionStates);
             } else {
                 Log.i(TAG, String.format("%s No checked connection states.", funcName));
             }
@@ -237,10 +214,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int VISIBLE_STATE = 3;
     private static final int GONE_STATE = 4;
 
-    private static class MonitorHandler extends Handler {
+    private static class TrackHandler extends Handler {
         MainActivity mthis;
 
-        MonitorHandler(@NonNull MainActivity activity) {
+        TrackHandler(@NonNull MainActivity activity) {
             this.mthis = activity;
         }
 
@@ -249,10 +226,10 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case BLOCK_BUTTON:
-                    mthis.monitorButton.blockButton();
+                    mthis.trackButton.blockButton();
                     break;
                 case UNBLOCK_BUTTON:
-                    mthis.monitorButton.unblockButton();
+                    mthis.trackButton.unblockButton();
                     break;
                 case VISIBLE_STATE:
                     mthis.stateProgressLayout.setVisibility(View.VISIBLE);
@@ -266,29 +243,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startMonitor(@NonNull List<ConnectionState> states) {
-        String funcName = "[startMonitor]";
+    private void startTrack(@NonNull List<ConnectionState> states) {
+        String funcName = "[startTrack]";
 
-        Log.i(TAG, String.format("%s App started monitoring for connection states.", funcName));
+        Log.i(TAG, String.format("%s App started tracking for connection states.", funcName));
 
-        Handler handler = new MonitorHandler(this);
+        Handler handler = new TrackHandler(this);
         new Thread(() -> {
             handler.sendEmptyMessage(BLOCK_BUTTON);
-            Log.i(TAG, String.format("%s Monitor button was blocked.", funcName));
+            Log.i(TAG, String.format("%s Track button was blocked.", funcName));
             handler.sendEmptyMessage(VISIBLE_STATE);
             Log.i(TAG, String.format("%s ConnectionStateLayout visible.", funcName));
-            ConnectionState resState = new ConnectionState(ConnectionType.getNetworkClass(this));
+            ConnectionState resState = new ConnectionState(ConnectionState.getCurrentConnectionType(this));
             while (!isExitClicked &&
-                    !states.contains(resState = new ConnectionState(ConnectionType.getNetworkClass(this)))) {
+                    !states.contains(resState = new ConnectionState(ConnectionState.getCurrentConnectionType(this)))) {
                 try {
-                    sleep(1000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
             Log.i(TAG, String.format("%s Connection state %s appeared.", funcName, resState.getConnectionType()));
             handler.sendEmptyMessage(UNBLOCK_BUTTON);
-            Log.i(TAG, String.format("%s Monitor button was unblocked.", funcName));
+            Log.i(TAG, String.format("%s Track button was unblocked.", funcName));
             handler.sendEmptyMessage(GONE_STATE);
             Log.i(TAG, String.format("%s ConnectionStateLayout invisible.", funcName));
             if (!isExitClicked) {

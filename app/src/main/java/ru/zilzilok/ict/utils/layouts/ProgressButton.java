@@ -14,8 +14,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import ru.zilzilok.ict.R;
 
+/**
+ * Class for progress button.
+ */
 public class ProgressButton {
-    private View view;
+    private View view;                          // Current view
+
+    // Button components
     private CardView cardView;
     private ConstraintLayout constraintLayout;
     private LinearLayout linearLayout;
@@ -51,14 +56,23 @@ public class ProgressButton {
         imageView.setImageResource(imageId);
     }
 
+    /**
+     * Use to block progress button.
+     */
     public void blockButton() {
         view.setEnabled(false);
     }
 
+    /**
+     * Use to unblock progress button.
+     */
     public void unblockButton() {
         view.setEnabled(true);
     }
 
+    /**
+     * Use when progress button activated.
+     */
     public void buttonActivated() {
         progressBar.setAnimation(fade_in);
         imageView.setVisibility(View.GONE);
@@ -67,6 +81,9 @@ public class ProgressButton {
         textView.setText(context.getResources().getString(R.string.wait_loading));
     }
 
+    /**
+     * Use when progress button restored.
+     */
     public void buttonRestored() {
         constraintLayout.setBackground(cardView.getContext().getDrawable(R.drawable.button_background));
         progressBar.setVisibility(View.GONE);
@@ -74,12 +91,18 @@ public class ProgressButton {
         textView.setText(firstText);
     }
 
+    /**
+     * Use when progress button failed.
+     */
     public void buttonFailed() {
         constraintLayout.setBackgroundColor(cardView.getContext().getColor(R.color.red));
         progressBar.setVisibility(View.GONE);
         textView.setText("Error");
     }
 
+    /**
+     * Use when progress button finished.
+     */
     public void buttonFinished() {
         constraintLayout.setBackgroundColor(cardView.getContext().getColor(R.color.green));
         progressBar.setVisibility(View.GONE);

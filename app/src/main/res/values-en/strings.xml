@@ -6,7 +6,7 @@
     <string name="default_value">Default String</string>
 
     <!--Main Buttons-->
-    <string name="monitor_button">Monitor</string>
+    <string name="track_button">Monitor</string>
     <string name="check_button">Check</string>
     <string name="stat_button">Statistics</string>
 
@@ -29,6 +29,7 @@
     <string name="stat_number_selected_connection_type">Number of selected</string>
     <string name="stat_last_appeared_title">Location of the last appeared</string>
     <string name="stat_last_selected_title">Location of the last selected</string>
+    <string name="restart_alert">The application needs to be restarted.</string>
     <bool name="stat_no_internet_type_rus">false</bool>
 
     <!--Etc.-->
