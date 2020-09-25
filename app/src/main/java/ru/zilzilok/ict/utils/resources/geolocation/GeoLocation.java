@@ -1,5 +1,6 @@
 package ru.zilzilok.ict.utils.resources.geolocation;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
+import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.resources.ResourceNotAvailableException;
 
 /**
@@ -37,9 +39,8 @@ public class GeoLocation implements GeoLocationChangedListener {
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
 
-
         try {
-            Address address = this.geocoder.getFromLocation(this.location.getLatitude(), this.location.getLongitude(), 1).get(0);
+            Address address = this.geocoder.getFromLocation(this.latitude, this.longitude, 1).get(0);
 
             country = address.getCountryName();
             countryCode = address.getCountryCode();
@@ -109,6 +110,26 @@ public class GeoLocation implements GeoLocationChangedListener {
 
     public String getHemisphere() throws ResourceNotAvailableException {
         return String.format("(%f,%f)", getLongitude(), getLatitude());
+    }
+
+    public static String getGeolocationByCoordinates(Context context, Double latitude, Double longitude) {
+        String geolocation = context.getResources().getString(R.string.geolocation_default_value);
+        try {
+            Address currAddress = new Geocoder(context).getFromLocation(latitude, longitude, 1).get(0);
+            String currCountry = currAddress.getCountryName();
+            String currCity = currAddress.getLocality();
+            String currStreet = currAddress.getThoroughfare();
+            String currFeature = currAddress.getFeatureName();
+
+            if (currCountry != null)
+                geolocation = String.format("%s, %s, %s, %s", currCountry, currCity, currStreet, currFeature);
+
+            Log.i(TAG, "Overall: " + currAddress.toString());
+            Log.i(TAG, "Geolocation: " + geolocation);
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
+        return geolocation;
     }
 
     @NonNull

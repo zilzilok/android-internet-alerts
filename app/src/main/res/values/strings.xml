@@ -30,6 +30,7 @@
     <string name="stat_last_appeared_title">Местоположение последнего появившегося</string>
     <string name="stat_last_selected_title">Местоположение последнего выбранного</string>
     <string name="restart_alert">Необходимо перезапустить приложение.</string>
+    <string name="geolocation_default_value">Нет данных</string>
     <bool name="stat_no_internet_type_rus">true</bool>
 
     <!--Etc.-->

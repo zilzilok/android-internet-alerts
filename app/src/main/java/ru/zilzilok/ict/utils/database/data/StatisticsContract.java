@@ -29,6 +29,7 @@ public class StatisticsContract {
 
         public static final String _ID = BaseColumns._ID;
         public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_LAST_VALUE = "value";
+        public static final String COLUMN_LAST_LATITUDE = "latitude";
+        public static final String COLUMN_LAST_LONGITUDE = "longitude";
     }
 }

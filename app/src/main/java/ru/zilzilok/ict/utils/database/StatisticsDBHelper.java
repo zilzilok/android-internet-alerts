@@ -10,11 +10,14 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.activities.MainActivity;
 import ru.zilzilok.ict.utils.connection.ConnectionState;
 import ru.zilzilok.ict.utils.connection.ConnectionTypeConverter;
 import ru.zilzilok.ict.utils.database.data.StatisticsContract;
+import ru.zilzilok.ict.utils.resources.ResourceNotAvailableException;
 import ru.zilzilok.ict.utils.resources.Resources;
+import ru.zilzilok.ict.utils.resources.geolocation.GeoLocation;
 
 /**
  * Class that helps to work with statistics database.
@@ -34,7 +37,8 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
         String SQL_CREATE_GEOLOCATION_TABLE = "CREATE TABLE " + StatisticsContract.GeolocationInfo.TABLE_NAME + " ("
                 + StatisticsContract.GeolocationInfo._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + StatisticsContract.GeolocationInfo.COLUMN_NAME + " TEXT NOT NULL, "
-                + StatisticsContract.GeolocationInfo.COLUMN_LAST_VALUE + " TEXT NOT NULL DEFAULT \"null\");";
+                + StatisticsContract.GeolocationInfo.COLUMN_LAST_LATITUDE + " REAL NOT NULL DEFAULT 0.0,"
+                + StatisticsContract.GeolocationInfo.COLUMN_LAST_LONGITUDE + " REAL NOT NULL DEFAULT 0.0);";
 
         String SQL_CREATE_CONNECTION_TABLE = "CREATE TABLE " + StatisticsContract.ConnectionInfo.TABLE_NAME + " ("
                 + StatisticsContract.ConnectionInfo._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -59,9 +63,10 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
         String[] projection = {
                 StatisticsContract.GeolocationInfo._ID,
                 StatisticsContract.GeolocationInfo.COLUMN_NAME,
-                StatisticsContract.GeolocationInfo.COLUMN_LAST_VALUE};
+                StatisticsContract.GeolocationInfo.COLUMN_LAST_LATITUDE,
+                StatisticsContract.GeolocationInfo.COLUMN_LAST_LONGITUDE};
 
-        String name = getGeolocationName(isSelected);
+        String name = getGeolocationTableName(isSelected);
 
         Cursor cursor = db.query(
                 StatisticsContract.GeolocationInfo.TABLE_NAME,
@@ -72,17 +77,20 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
                 null,
                 null);
 
-        String output = "null";
+        Double latitude;
+        Double longitude;
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            output = cursor.getString(2);
+            latitude = cursor.getDouble(2);
+            longitude = cursor.getDouble(3);
             cursor.close();
+            return GeoLocation.getGeolocationByCoordinates(MainActivity.getContext(), latitude, longitude);
         }
-        return output;
+        return MainActivity.getContext().getResources().getString(R.string.geolocation_default_value);
     }
 
     /**
-     * @param name of connection type
+     * @param name       of connection type
      * @param isSelected true if you need info about selected connection type, false otherwise
      * @return quantity of selected/appeared connection
      */
@@ -114,8 +122,9 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
 
     /**
      * Updates database.
+     *
      * @param connectionStates updated connection states
-     * @param isSelected true if you need info about selected connection type, false otherwise
+     * @param isSelected       true if you need info about selected connection type, false otherwise
      */
     public void updateDatabase(@NonNull List<ConnectionState> connectionStates, boolean isSelected) {
         updateConnectionTable(connectionStates, isSelected);
@@ -153,13 +162,15 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
 
     private void updateGeolocationTable(boolean isSelected) {
         String funcName = "[updateDatabase]";
-        String geolocation = Resources.INSTANCE.geoLocation.toString();
+        try {
+            Double latitude = Resources.INSTANCE.geoLocation.getLatitude();
+            Double longitude = Resources.INSTANCE.geoLocation.getLongitude();
 
-        if(!geolocation.equals("null")) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues cv = new ContentValues();
-            String name = getGeolocationName(isSelected);
-            cv.put(StatisticsContract.GeolocationInfo.COLUMN_LAST_VALUE, geolocation);
+            String name = getGeolocationTableName(isSelected);
+            cv.put(StatisticsContract.GeolocationInfo.COLUMN_LAST_LATITUDE, latitude);
+            cv.put(StatisticsContract.GeolocationInfo.COLUMN_LAST_LONGITUDE, longitude);
             int res = db.update(
                     StatisticsContract.GeolocationInfo.TABLE_NAME,
                     cv,
@@ -172,15 +183,13 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
                         null,
                         cv);
             }
-
             Log.i(TAG, String.format("%s Database %s was updated.", funcName, StatisticsContract.DATABASE_NAME));
-        }
-        else {
+        } catch (ResourceNotAvailableException ignore) {
             Log.i(TAG, String.format("%s Database %s wasn't updated.", funcName, StatisticsContract.DATABASE_NAME));
         }
     }
 
-    private String getGeolocationName(boolean isSelected) {
+    private String getGeolocationTableName(boolean isSelected) {
         return isSelected ? "last_selected" : "last_appeared";
     }
 }

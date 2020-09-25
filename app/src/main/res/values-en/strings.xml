@@ -30,6 +30,7 @@
     <string name="stat_last_appeared_title">Location of the last appeared</string>
     <string name="stat_last_selected_title">Location of the last selected</string>
     <string name="restart_alert">The application needs to be restarted.</string>
+    <string name="geolocation_default_value">No data</string>
     <bool name="stat_no_internet_type_rus">false</bool>
 
     <!--Etc.-->
