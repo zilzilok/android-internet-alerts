@@ -10,6 +10,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        setProperty("archivesBaseName", "${applicationName}-v${versionName}(${versionCode})")
     }
 
     compileOptions {
@@ -23,7 +24,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -41,5 +41,5 @@ dependencies {
     implementation 'org.jetbrains:annotations:15.0'
 
     // play services location
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 }
