@@ -6,7 +6,7 @@
     <string name="default_value">Default String</string>
 
     <!--Main Buttons-->
-    <string name="track_button">Monitor</string>
+    <string name="track_button">Track</string>
     <string name="check_button">Check</string>
     <string name="stat_button">Statistics</string>
 

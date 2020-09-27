@@ -148,12 +148,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*
-          ___   _            _                         _   _
-         / __| | |_   __ _  | |_   ___     ___  __ __ (_) | |_
-         \__ \ |  _| / _` | |  _| / -_)   / -_) \ \ / | | |  _|
-         |___/  \__| \__,_|  \__| \___|   \___| /_\_\ |_|  \__|
-     */
     private void buttonCloseClicked(@NonNull View view) {
         String funcName = "[buttonCloseClicked]";
         Log.i(TAG, String.format("%s Close button was clicked.", funcName));
