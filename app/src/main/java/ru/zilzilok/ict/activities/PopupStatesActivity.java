@@ -14,7 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import ru.zilzilok.ict.R;
+import ru.zilzilok.ict.utils.database.Databases;
 
 /**
  * Activity to select what you want to track.
@@ -22,8 +25,8 @@ import ru.zilzilok.ict.R;
 public class PopupStatesActivity extends AppCompatActivity {
     private static final String TAG = "PopupStatesActivity";
 
-    private ListView listView;  // List of connection types
-    String[] values;            // Array with all connection types
+    private ListView listView;      // List of connection types
+    List<String> values;            // List with all connection types
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,14 @@ public class PopupStatesActivity extends AppCompatActivity {
     private void initializeStatesList() {
         listView = findViewById(R.id.statesListView);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        values = getResources().getStringArray(R.array.connection_types);
+        values = Databases.getInstance().statisticsDBHelper.getAppearedConnectionsNameByOrder(false);
+        String[] tmpValues = getResources().getStringArray(R.array.connection_types);
+        if (values.size() != tmpValues.length) {
+            for (String conName : tmpValues) {
+                if (!values.contains(conName))
+                    values.add(conName);
+            }
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.state_list_item_multiple_choice, values);
         listView.setAdapter(adapter);
 
@@ -65,9 +75,9 @@ public class PopupStatesActivity extends AppCompatActivity {
         if (listView.getCheckedItemCount() > 0) {
             String[] checkedValues = new String[listView.getCheckedItemCount()];
             int j = 0;
-            for (int i = 0; i < values.length; i++) {
+            for (int i = 0; i < values.size(); i++) {
                 if (listView.isItemChecked(i))
-                    checkedValues[j++] = values[i];
+                    checkedValues[j++] = values.get(i);
             }
             intent.putExtra("checkedValues", checkedValues);
             setResult(RESULT_OK, intent);

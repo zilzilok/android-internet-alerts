@@ -2,6 +2,9 @@ package ru.zilzilok.ict.utils.connection;
 
 import androidx.annotation.NonNull;
 
+import ru.zilzilok.ict.R;
+import ru.zilzilok.ict.activities.MainActivity;
+
 /**
  * Abstract class for converting connection types identically.
  */
@@ -14,7 +17,11 @@ public abstract class ConnectionTypeConverter {
         public static final String _4G = "4g";
     }
 
-    public static String get(@NonNull String conType) {
+    /**
+     * @param conType connection type for converting
+     * @return short name of connection type
+     */
+    public static String getShort(@NonNull String conType) {
         switch (conType) {
             case "WIFI":
             case TYPES.WIFI:
@@ -32,6 +39,27 @@ public abstract class ConnectionTypeConverter {
             case "4G/LTE":
             case TYPES._4G:
                 return TYPES._4G;
+            default:
+                return "not_found";
+        }
+    }
+
+    /**
+     * @param conType connection type for converting
+     * @return full name of connection type
+     */
+    public static String getFull(@NonNull String conType) {
+        switch (conType) {
+            case TYPES.WIFI:
+                return MainActivity.getContext().getResources().getString(R.string.wifi);
+            case TYPES.NO_INTERNET:
+                return MainActivity.getContext().getResources().getString(R.string.no_internet);
+            case TYPES._2G:
+                return MainActivity.getContext().getResources().getString(R.string._2g);
+            case TYPES._3G:
+                return MainActivity.getContext().getResources().getString(R.string._3g);
+            case TYPES._4G:
+                return MainActivity.getContext().getResources().getString(R.string._4g);
             default:
                 return "not_found";
         }

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.zilzilok.ict.R;
@@ -121,6 +122,38 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * @param ascend if true then in ascending order, else in descending order
+     * @return appeared connection types by specific order
+     */
+    public List<String> getAppearedConnectionsNameByOrder(boolean ascend) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {
+                StatisticsContract.ConnectionInfo._ID,
+                StatisticsContract.ConnectionInfo.COLUMN_NAME,
+                StatisticsContract.ConnectionInfo.COLUMN_APPEARED,
+                StatisticsContract.ConnectionInfo.COLUMN_SELECTED};
+
+        Cursor cursor = db.query(
+                StatisticsContract.ConnectionInfo.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                StatisticsContract.ConnectionInfo.COLUMN_SELECTED + (ascend ? " ASC" : " DESC"));
+
+        List<String> res = new ArrayList<>();
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                res.add(ConnectionTypeConverter.getFull(cursor.getString(1)));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return res;
+    }
+
+    /**
      * Updates database.
      *
      * @param connectionStates updated connection states
@@ -136,7 +169,7 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         for (ConnectionState cs : connectionStates) {
-            String name = ConnectionTypeConverter.get(cs.getConnectionType());
+            String name = ConnectionTypeConverter.getShort(cs.getConnectionType());
             ContentValues cv = new ContentValues();
             if (isSelected) {
                 cv.put(StatisticsContract.ConnectionInfo.COLUMN_SELECTED, getConnectionInt(name, true) + 1);
