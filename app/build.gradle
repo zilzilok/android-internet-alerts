@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "ru.zilzilok.internet_connection_tracker"
+        applicationId "ru.zilzilok.ict"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

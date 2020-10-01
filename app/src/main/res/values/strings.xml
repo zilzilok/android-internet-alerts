@@ -5,6 +5,10 @@
     <string name="app_name_fullname">Internet Connection Tracker</string>
     <string name="default_value">Обычная строка</string>
 
+    <!--App Widget-->
+    <string name="appwidget_text">Наблюдать</string>
+    <string name="add_widget">Add widget</string>
+
     <!--Main Buttons-->
     <string name="track_button">Наблюдать</string>
     <string name="check_button">Проверить</string>
