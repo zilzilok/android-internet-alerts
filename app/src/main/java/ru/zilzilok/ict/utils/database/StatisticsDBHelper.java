@@ -57,7 +57,7 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
 
     /**
      * @param isSelected true if you need info about selected connection type, false otherwise
-     * @return last geolocation
+     * @return array of size 2 with last coordinates (latitude and longitude)
      */
     public String getGeolocation(boolean isSelected) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -88,6 +88,35 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
             return GeoLocation.getGeolocationByCoordinates(MainActivity.getContext(), latitude, longitude);
         }
         return MainActivity.getContext().getResources().getString(R.string.geolocation_default_value);
+    }
+
+    public Double[] getCoordinates(boolean isSelected) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {
+                StatisticsContract.GeolocationInfo._ID,
+                StatisticsContract.GeolocationInfo.COLUMN_NAME,
+                StatisticsContract.GeolocationInfo.COLUMN_LAST_LATITUDE,
+                StatisticsContract.GeolocationInfo.COLUMN_LAST_LONGITUDE};
+
+        String name = getGeolocationTableName(isSelected);
+
+        Cursor cursor = db.query(
+                StatisticsContract.GeolocationInfo.TABLE_NAME,
+                projection,
+                StatisticsContract.GeolocationInfo.COLUMN_NAME + " = ?", new String[]{name},
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            double latitude = cursor.getDouble(2);
+            double longitude = cursor.getDouble(3);
+            cursor.close();
+            return new Double[]{latitude, longitude};
+        }
+        return null;
     }
 
     /**

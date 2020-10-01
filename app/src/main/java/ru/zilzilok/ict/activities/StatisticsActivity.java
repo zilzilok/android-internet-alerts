@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.r0adkll.slidr.Slidr;
+
+import java.util.Locale;
 
 import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.adapter.ConnectionStatisticAdapter;
@@ -149,6 +152,25 @@ public class StatisticsActivity extends AppCompatActivity {
 
         lastSelected.setText(Databases.getInstance().statisticsDBHelper.getGeolocation(true));
         lastAppeared.setText(Databases.getInstance().statisticsDBHelper.getGeolocation(false));
+
+        LinearLayout lastSelectedLayout = locationData.findViewById(R.id.locationDataSelected);
+        lastSelectedLayout.setOnClickListener(v -> {
+            Double[] coords = Databases.getInstance().statisticsDBHelper.getCoordinates(true);
+            if (coords != null) {
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", coords[0], coords[1]);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+        LinearLayout lastAppearedLayout = locationData.findViewById(R.id.locationDataAppeared);
+        lastAppearedLayout.setOnClickListener(v -> {
+            Double[] coords = Databases.getInstance().statisticsDBHelper.getCoordinates(false);
+            if (coords != null) {
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", coords[0], coords[1]);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeRestartAlertDialog() {

@@ -59,38 +59,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statSwitchCompat">
 
-        <TextView
-            android:id="@+id/statLastAppearedTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/locationDataAppeared"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/stat_last_appeared_title"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/statLastAppearedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:text="Moscow" />
+            android:background="@drawable/location_data_background"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/statLastSelectedTitle"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/statLastAppearedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/stat_last_appeared_title"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/statLastAppearedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Moscow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/locationDataSelected"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:text="@string/stat_last_selected_title"
-            android:textColor="@color/black" />
+            android:background="@drawable/location_data_background"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/statLastSelectedTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:text="Ufa" />
+            <TextView
+                android:id="@+id/statLastSelectedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/stat_last_selected_title"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/statLastSelectedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Ufa" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

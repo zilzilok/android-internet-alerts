@@ -12,6 +12,7 @@
     <color name="green">#008000</color>
     <color name="red">#FF0000</color>
 
-<color name="whiteOpacity">#99FAFAFA</color>
+    <color name="whiteOpacity">#99FAFAFA</color>
     <color name="black">#000000</color>
+    <color name="grey">#DCDCDC</color>
 </resources>
