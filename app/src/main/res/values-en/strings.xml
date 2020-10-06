@@ -5,10 +5,6 @@
     <string name="app_name_fullname">Internet Connection Tracker</string>
     <string name="default_value">Default String</string>
 
-    <!--App Widget-->
-    <string name="appwidget_text">Track</string>
-    <string name="add_widget">Add widget</string>
-
     <!--Main Buttons-->
     <string name="track_button">Track</string>
     <string name="check_button">Check</string>
