@@ -55,6 +55,7 @@ public class GeoLocation implements GeoLocationChangedListener {
                 Log.i(TAG, "Country: " + getCountry());
                 Log.i(TAG, "City: " + getCity());
                 Log.i(TAG, "Street: " + getStreet());
+                Log.i(TAG, "Feature: " + getFeature());
                 Log.i(TAG, "Hemisphere: " + getHemisphere());
             } catch (ResourceNotAvailableException ignored) {
 

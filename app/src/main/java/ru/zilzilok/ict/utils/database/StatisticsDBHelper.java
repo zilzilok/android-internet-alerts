@@ -57,7 +57,7 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
 
     /**
      * @param isSelected true if you need info about selected connection type, false otherwise
-     * @return array of size 2 with last coordinates (latitude and longitude)
+     * @return address if we know any coordinates, "no data" otherwise
      */
     public String getGeolocation(boolean isSelected) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -90,6 +90,10 @@ public class StatisticsDBHelper extends SQLiteOpenHelper {
         return MainActivity.getContext().getResources().getString(R.string.geolocation_default_value);
     }
 
+    /**
+     * @param isSelected true if you need info about selected connection type, false otherwise
+     * @return array of size 2 with last coordinates (latitude and longitude)
+     */
     public Double[] getCoordinates(boolean isSelected) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = {

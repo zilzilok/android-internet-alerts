@@ -57,13 +57,6 @@ public class MainActivity extends AppCompatActivity {
         initializeAppButtons();
 
         GeoLocationHandler geoLocationHandler = new GeoLocationHandler(this, Resources.INSTANCE.geoLocation);
-        Log.i(TAG, "OnCreate");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "OnResume");
     }
 
     /**
