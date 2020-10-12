@@ -4,13 +4,15 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
-import ru.zilzilok.ict.R;
 import ru.zilzilok.ict.utils.resources.ResourceNotAvailableException;
 
 /**
@@ -110,11 +112,11 @@ public class GeoLocation implements GeoLocationChangedListener {
     }
 
     public String getHemisphere() throws ResourceNotAvailableException {
-        return String.format("(%f,%f)", getLongitude(), getLatitude());
+        return String.format("(%f,%f)", getLatitude(), getLongitude());
     }
 
     public static String getGeolocationByCoordinates(Context context, Double latitude, Double longitude) {
-        String geolocation = context.getResources().getString(R.string.geolocation_default_value);
+        String geolocation = "";
         try {
             Address currAddress = new Geocoder(context).getFromLocation(latitude, longitude, 1).get(0);
             String currCountry = currAddress.getCountryName();
@@ -122,15 +124,24 @@ public class GeoLocation implements GeoLocationChangedListener {
             String currStreet = currAddress.getThoroughfare();
             String currFeature = currAddress.getFeatureName();
 
+            List<String> strings = new LinkedList<>();
             if (currCountry != null)
-                geolocation = String.format("%s, %s, %s, %s", currCountry, currCity, currStreet, currFeature);
+                strings.add(currCountry);
+            if (currCity != null)
+                strings.add(currCity);
+            if (currStreet != null)
+                strings.add(currStreet);
+            if (currFeature != null)
+                strings.add(currFeature);
+
+            geolocation = TextUtils.join(", ", strings);
 
             Log.i(TAG, "Overall: " + currAddress.toString());
             Log.i(TAG, "Geolocation: " + geolocation);
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }
-        return geolocation;
+        return geolocation.isEmpty() ? String.format("(%f, %f)", latitude, longitude) : geolocation;
     }
 
     @NonNull
